@@ -4,7 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon --watch dev -e js dev/api.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "sha256": "^0.2.0",
+    "uuid": "^3.3.2"
+  }
 }
