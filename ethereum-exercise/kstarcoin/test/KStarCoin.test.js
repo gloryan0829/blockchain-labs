@@ -19,14 +19,14 @@ beforeEach(async () => {
 });
 
 describe('#getMyUnlockValue() of LockableToken Contract', () => {
-   it('10 스타코인를 보유한 accounts[1]이 5스타코인를 잠근고 4스타코인를 송금하고 2스타코인를 또 송금해본다', async () => {
+   it('10 케이스타코인를 보유한 accounts[1]이 5케이스타코인를 잠그고 4케이스타코인를 송금하고 2케이스타코인를 또 송금해본다', async () => {
 
        // 잠금 해제
        await kStarCoin.methods.unlock('테스트 잠금해제').send({
            from: accounts[0]
        });
 
-       // 10 스타코인 accounts[1] 보유
+       // 10 케이스타코인 accounts[1] 보유
        await kStarCoin.methods.kscTransfer(
            accounts[1],
            web3.utils.toWei('10', 'ether'),
@@ -35,7 +35,7 @@ describe('#getMyUnlockValue() of LockableToken Contract', () => {
            from: accounts[0]
        });
 
-       // 잠금 5스타코인 설정
+       // 잠금 5케이스타코인 설정
        await kStarCoin.methods.setLockValue(
            accounts[1],
            web3.utils.toWei('5', 'ether'),
@@ -61,7 +61,7 @@ describe('#getMyUnlockValue() of LockableToken Contract', () => {
                 transferableBalance
            );
 
-       // 2 스타코인 송금 - 실패 해야함..
+       // 2 케이스타코인 송금 - 실패 해야함..
        kStarCoin.methods.kscTransfer(
            accounts[2],
            web3.utils.toWei('2', 'ether'),
@@ -85,7 +85,7 @@ setTimeout(()=>{
             await kStarCoin.methods.unlock('테스트 잠금해제').send({
                 from: accounts[0]
             });
-            // 10 스타코인 accounts[1] 보유
+            // 10 케이스타코인 accounts[1] 보유
             await kStarCoin.methods.kscTransfer(
                 accounts[1],
                 web3.utils.toWei('10', 'ether'),
@@ -96,7 +96,7 @@ setTimeout(()=>{
         });
 
         describe('#delayLock()', () => {
-            it('제한 금액 3 > 5 스타코인으로 제한을 걸어보고 더 작게 4 스타코인을 걸어봄 & 출금도 테스트해보 ', async ()=>{
+            it('제한 금액 3 > 5 케이스타코인으로 제한을 걸어보고 더 작게 4 케이스타코인을 걸어봄 & 출금도 테스트해보 ', async ()=>{
 
                 let beforeTime = new Date().getTime();
 
@@ -136,7 +136,7 @@ setTimeout(()=>{
                         beforeTime + 30000000 < afterTime
                 );
 
-                //출금을 진행해 보자 delayLockBeforeValues에 걸리는 지 확인 7 스타코인 전송
+                //출금을 진행해 보자 delayLockBeforeValues에 걸리는 지 확인 7 케이스타코인 전송
                 kStarCoin.methods.kscTransfer(
                     accounts[2],
                     web3.utils.toWei('7', 'ether'),
@@ -371,7 +371,7 @@ describe('KStarCoin Contract', () => {
     describe('#kscSell()', () => {
        it('payable은 아니고 사전에 이더를 보낸 사람에게 토큰을 trnasfer하는 기능임',async () => {
 
-           // accounts[1]에게 10 스타코인을 approve 함
+           // accounts[1]에게 10 케이스타코인을 approve 함
            await kStarCoin.methods.approve(
                accounts[1],
                web3.utils.toWei('10','ether')
@@ -419,7 +419,7 @@ describe('KStarCoin Contract', () => {
     describe('#kscBatchSellByOtherCoin()', () => {
        it('',async () => {
 
-           // accounts[1]에게 10 스타코인을 approve 함
+           // accounts[1]에게 10 케이스타코인을 approve 함
            await kStarCoin.methods.approve(
                accounts[1],
                web3.utils.toWei('10','ether')
