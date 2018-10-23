@@ -75,16 +75,14 @@ describe('# Additional Unit Test 1 : 10 케이스타코인를 보유한 accounts
         );
 
         // 2 케이스타코인 송금 - 실패 해야함..
-        kStarCoin.methods.kscTransfer(
+        await kStarCoin.methods.kscTransfer(
             accounts[2],
             web3.utils.toWei('2', 'ether'),
             ''
         ).send({
             from: accounts[1]
-        },(error, result) => {
-            if(error) {
-                assert.equal('revert', error.results[error.hashes[0]].error);
-            }
+        }).catch((error) => {
+            assert.equal('revert', error.results[error.hashes[0]].error);
         });
 
         // 실패 이후 잔고제한 0으로 바꿈
@@ -134,16 +132,14 @@ describe('# Additional Unit Test 1 : 10 케이스타코인를 보유한 accounts
             });
 
         // lock 이 걸린 계정에서 출금 시도해 보기.
-        kStarCoin.methods.kscTransfer(
+        await kStarCoin.methods.kscTransfer(
             accounts[2],
             web3.utils.toWei('10', 'ether'),
             ''
         ).send({
             from: accounts[1]
-        },(error, result)=>{
-            if(error){
-                assert.equal('revert', error.results[error.hashes[0]].error);
-            }
+        }).catch((error) => {
+            assert.equal('revert', error.results[error.hashes[0]].error);
         });
 
         // unlockTo 테스트
@@ -248,16 +244,14 @@ describe('# Additional Unit Test 2 : 전체가 lock 인 상태에서', () => {
         });
 
         // lockValue 5가 넘는 6 송금 시도 (실패해야함)
-        kStarCoin.methods.kscTransfer(
+        await kStarCoin.methods.kscTransfer(
             accounts[2],
             web3.utils.toWei('6', 'ether'),
             ''
         ).send({
             from: accounts[1]
-        },(error, result) => {
-            if(error){
-                assert.equal('revert', error.results[error.hashes[0]].error);
-            }
+        }).catch((error) => {
+            assert.equal('revert', error.results[error.hashes[0]].error);
         });
     });
 
@@ -286,25 +280,22 @@ describe('# Additional Unit Test 2 : 전체가 lock 인 상태에서', () => {
         });
 
         // lockValue 5가 넘는 6 송금 시도 (실패해야함)
-        kStarCoin.methods.kscTransfer(
+        await kStarCoin.methods.kscTransfer(
             accounts[2],
             web3.utils.toWei('6', 'ether'),
             ''
         ).send({
             from: accounts[1]
-        },(error, result) => {
-            if(error){
-                assert.equal('revert', error.results[error.hashes[0]].error);
-            }
+        }).catch((error) => {
+            assert.equal('revert', error.results[error.hashes[0]].error);
         });
 
         // 특정 계좌의 lockValue와 unlock 상태 확인
         const unlockAddrState = await kStarCoin.methods.unlockAddrs(accounts[1]).call();
         const lockValueOfAddr = await kStarCoin.methods.lockValues(accounts[1]).call();
 
-        assert.equal(
-            [false, web3.utils.toWei('5', 'ether')],
-            [unlockAddrState, lockValueOfAddr]);
+        assert.equal(false, unlockAddrState);
+        assert.equal(web3.utils.toWei('5', 'ether'), lockValueOfAddr);
 
     });
 
@@ -338,16 +329,14 @@ describe('# Additional Unit Test 2 : 전체가 lock 인 상태에서', () => {
         });
 
         // lockValue 5가 넘는 6 송금 시도 (실패해야함)
-        kStarCoin.methods.kscTransfer(
+        await kStarCoin.methods.kscTransfer(
             accounts[2],
             web3.utils.toWei('6', 'ether'),
             ''
         ).send({
             from: accounts[1]
-        },(error, result) => {
-            if(error){
-                assert.equal('revert', error.results[error.hashes[0]].error);
-            }
+        }).catch((error) => {
+            assert.equal('revert', error.results[error.hashes[0]].error);
         });
 
     });
@@ -381,58 +370,58 @@ describe('꼼꼼하게 보는 차원에서,', () => {
         });
 
         // changeSuperOwnerByDAO onlyOwner 테스트
-        kStarCoin.methods.changeSuperOwnerByDAO(accounts[2]).send({
+        await kStarCoin.methods.changeSuperOwnerByDAO(accounts[2]).send({
             from : accounts[1]
-        },(error, result) => {
+        }).catch((error) => {
             assert.equal('revert', error.results[error.hashes[0]].error);
         });
 
         // lock onlyOwner 테스트
-        kStarCoin.methods.lock(accounts[2]).send({
+        await kStarCoin.methods.lock(accounts[2]).send({
             from : accounts[1]
-        },(error, result) => {
+        }).catch((error) => {
             assert.equal('revert', error.results[error.hashes[0]].error);
         });
 
         // unlock onlyOwner 테스트
-        kStarCoin.methods.unlock(accounts[2]).send({
+        await kStarCoin.methods.unlock(accounts[2]).send({
             from : accounts[1]
-        },(error, result) => {
+        }).catch((error) => {
             assert.equal('revert', error.results[error.hashes[0]].error);
         });
 
         // lockTo onlyOwner 테스트
-        kStarCoin.methods.lockTo(accounts[2],'').send({
+        await kStarCoin.methods.lockTo(accounts[2],'').send({
             from : accounts[1]
-        },(error, result) => {
+        }).catch((error) => {
             assert.equal('revert', error.results[error.hashes[0]].error);
         });
 
         // unlockTo onlyOwner 테스트
-        kStarCoin.methods.unlockTo(accounts[2],'').send({
+        await kStarCoin.methods.unlockTo(accounts[2],'').send({
             from : accounts[1]
-        },(error, result) => {
+        }).catch((error) => {
             assert.equal('revert', error.results[error.hashes[0]].error);
         });
 
         // setLockValue onlyOwner 테스트
-        kStarCoin.methods.setLockValue(accounts[2],0,'').send({
+        await kStarCoin.methods.setLockValue(accounts[2],0,'').send({
             from : accounts[1]
-        },(error, result) => {
+        }).catch((error) => {
             assert.equal('revert', error.results[error.hashes[0]].error);
         });
 
         // kscMintTo onlyOwner 테스트
-        kStarCoin.methods.kscMintTo(accounts[2], 10000, '').send({
+        await kStarCoin.methods.kscMintTo(accounts[2], 10000, '').send({
             from : accounts[1]
-        },(error, result) => {
+        }).catch((error) => {
             assert.equal('revert', error.results[error.hashes[0]].error);
         });
 
         // kscBurnFrom onlyOwner 테스트
-        kStarCoin.methods.kscBurnFrom(accounts[1], 10000, '').send({
+        await kStarCoin.methods.kscBurnFrom(accounts[1], 10000, '').send({
             from : accounts[1]
-        },(error, result) => {
+        }).catch((error) => {
             assert.equal('revert', error.results[error.hashes[0]].error);
         });
 
@@ -443,19 +432,19 @@ describe('꼼꼼하게 보는 차원에서,', () => {
             });
 
         // kscSell onlyOwner 테스트
-        kStarCoin.methods.kscSell(
+        await kStarCoin.methods.kscSell(
             accounts[0],
             accounts[2],
             web3.utils.toWei('10','ether'),
             ''
         ).send({
             from : accounts[1]
-        },(error, result) => {
+        }).catch((error) => {
             assert.equal('revert', error.results[error.hashes[0]].error);
         });
 
         // kscBatchSellByOtherCoin onlyOwner 테스트
-        kStarCoin.methods.kscBatchSellByOtherCoin(
+        await kStarCoin.methods.kscBatchSellByOtherCoin(
             accounts[0],
             [accounts[2],accounts[3]],
             [web3.utils.toWei('1','ether'),web3.utils.toWei('1','ether')],
@@ -464,36 +453,36 @@ describe('꼼꼼하게 보는 차원에서,', () => {
             'note'
         ).send({
             from : accounts[1]
-        },(error, result) => {
+        }).catch((error) => {
             assert.equal('revert', error.results[error.hashes[0]].error);
         });
 
         // kscTransferToTeam onlyOwner 테스트
-        kStarCoin.methods.kscTransferToTeam(
+        await kStarCoin.methods.kscTransferToTeam(
             accounts[0],
             accounts[2],
             web3.utils.toWei('10','ether'),
             'note'
         ).send({
             from : accounts[1]
-        },(error, result) => {
+        }).catch((error) => {
             assert.equal('revert', error.results[error.hashes[0]].error);
         });
 
         // kscTransferToPartner onlyOwner 테스트
-        kStarCoin.methods.kscTransferToPartner(
+        await kStarCoin.methods.kscTransferToPartner(
             accounts[0],
             accounts[2],
             web3.utils.toWei('10','ether'),
             'note'
         ).send({
             from : accounts[1]
-        },(error, result) => {
+        }).catch((error) => {
             assert.equal('revert', error.results[error.hashes[0]].error);
         });
 
         // kscBatchTransferToEcosystem onlyOwner 테스트
-        kStarCoin.methods.kscBatchTransferToEcosystem(
+        await kStarCoin.methods.kscBatchTransferToEcosystem(
             accounts[0],
             [accounts[2],accounts[3]],
             [web3.utils.toWei('1','ether'),web3.utils.toWei('1','ether')],
@@ -502,12 +491,12 @@ describe('꼼꼼하게 보는 차원에서,', () => {
             'note'
         ).send({
             from : accounts[1]
-        },(error, result) => {
+        }).catch((error) => {
             assert.equal('revert', error.results[error.hashes[0]].error);
         });
 
         // kscBatchTransferToBounty onlyOwner 테스트
-        kStarCoin.methods.kscBatchTransferToBounty(
+        await kStarCoin.methods.kscBatchTransferToBounty(
             accounts[0],
             [accounts[2],accounts[3]],
             [web3.utils.toWei('1','ether'),web3.utils.toWei('1','ether')],
@@ -516,7 +505,7 @@ describe('꼼꼼하게 보는 차원에서,', () => {
             'note'
         ).send({
             from : accounts[1]
-        },(error, result) => {
+        }).catch((error) => {
             assert.equal('revert', error.results[error.hashes[0]].error);
         });
 
@@ -529,10 +518,10 @@ describe('꼼꼼하게 보는 차원에서,', () => {
         });
 
         // destroy onlyRoot 테스트
-        kStarCoin.methods.destroy().send({
+        await kStarCoin.methods.destroy().send({
             from : accounts[0]
-        },(error, resultHash) => {
-            assert.ok(resultHash);
+        }).catch((error) => {
+            assert.equal('revert', error.results[error.hashes[0]].error);
         });
 
     });
@@ -558,6 +547,15 @@ describe('Unit Test 4 : LockableToken > DelayLockableToken 으로 Override 된 g
 
         await kStarCoin.methods.unlockTo(accounts[1],'').send({from:accounts[0]});
 
+
+        await kStarCoin.methods.setLockValue(
+            accounts[1],
+            web3.utils.toWei('3', 'ether'),
+            ''
+        ).send({
+            from : accounts[0]
+        });
+
         // 내 계좌에서 동일하게 5 코인 delayLock을 걸어봄
         await kStarCoin.methods.delayLock(
             web3.utils.toWei('5', 'ether')
@@ -565,38 +563,26 @@ describe('Unit Test 4 : LockableToken > DelayLockableToken 으로 Override 된 g
             from : accounts[1]
         });
 
-        // lockValue 5에서 4 송금 해봄...
-        await kStarCoin.methods.kscTransfer(
-            accounts[2],
-            web3.utils.toWei('4', 'ether'),
-            ''
-        ).send({
-            from: accounts[1]
-        });
-
-        const getMyUnlockValue = await kStarCoin.methods.getMyUnlockValue().call({from:accounts[1]});
-
-        console.log(getMyUnlockValue);
-
-        // 특정 계좌에서 동일하게 아까보다 낮은 4 코인 delayLock 을 걸어봄
+        // 내 계좌에서 동일하게 4 코인 delayLock을 걸어봄
         await kStarCoin.methods.delayLock(
             web3.utils.toWei('4', 'ether')
         ).send({
             from : accounts[1]
         });
 
-        const getMyUnlockValue2 = await kStarCoin.methods.getMyUnlockValue().call({from:accounts[1]});
-
-        console.log(getMyUnlockValue2);
-
-        // lockValue 4에서 3 송금 해봄...
+        // lockValue 5에서 4 송금 해봄...
         await kStarCoin.methods.kscTransfer(
             accounts[2],
-            web3.utils.toWei('3', 'ether'),
+            web3.utils.toWei('2', 'ether'),
             ''
         ).send({
             from: accounts[1]
         });
+
+        let getBalance = await kStarCoin.methods.balanceOf(accounts[1]).call();
+        let getMyUnlockValue = await kStarCoin.methods.getMyUnlockValue().call({from:accounts[1]});
+
+        console.log(getBalance + ' / ' + getMyUnlockValue);
 
     });
 });

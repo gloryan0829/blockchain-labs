@@ -273,7 +273,7 @@ library AddressUtils {
 
 /**
  * @title MultiOwnable
- * dev
+ * dev 
  */
 contract MultiOwnable {
     using SafeMath for uint256;
@@ -363,7 +363,7 @@ contract MultiOwnable {
         if (votingNumForSuperOwner > ownerList.length / 2) { // 과반수 이상이면 DAO 성립 => superOwner 교체
             superOwner = newSuperOwner;
 
-            // 초기화
+            // 초기화            
             for (i = 0; i < ownerList.length; i++) {
                 delete candidateSuperOwnerMap[ownerList[i]];
             }
@@ -497,8 +497,8 @@ contract DelayLockableToken is LockableToken {
     event SetDelayLockValue(address indexed addr, uint256 value, uint256 time);
 
     modifier checkDelayUnlock (address addr, uint256 value) {
-        if (delayLockTimes[msg.sender] <= now) {
-            require (balances[addr].sub(value) >= delayLockValues[addr], "Transferable limit exceeded. Change the balance lock value first and then use it");
+        if (delayLockTimes[msg.sender] < now) {
+            require (balances[addr].sub(value) >= delayLockValues[addr], "Transferable limit exceeded. Change the balance lock value first and then use it.");
         } else {
             require (balances[addr].sub(value) >= delayLockBeforeValues[addr], "Transferable limit exceeded. Please note that the residual lock value has changed and it will take 12 hours to apply.");
         }
@@ -506,10 +506,31 @@ contract DelayLockableToken is LockableToken {
     }
 
     /**
+     *
+     * dev 이체 가능 금액을 조회한다.
+     */
+    function getMyUnlockValue() public view returns (uint256) {
+        uint256 myUnlockValue;
+        address addr = msg.sender;
+        if (delayLockTimes[addr] <= now) {
+            myUnlockValue = balances[addr].sub(delayLockValues[addr]);
+        } else {
+            myUnlockValue = balances[addr].sub(delayLockBeforeValues[addr]);
+        }
+
+        uint256 superUnlockValue = super.getMyUnlockValue();
+
+        if (myUnlockValue > superUnlockValue)
+            return superUnlockValue;
+        else
+            return myUnlockValue;
+    }
+
+    /**
      * dev 자신의 계좌에 잔고 제한을 건다. 더 크게 걸 땐 바로 적용되고, 더 작게 걸 땐 12시간 이후에 변경된다.
      */
     function delayLock(uint256 value) public returns (bool) {
-        require (value <= balances[msg.sender], "Your balance is insufficient.");
+        require (value <= balances[msg.sender], "잔고가 부족합니다.");
 
         if (value >= delayLockValues[msg.sender])
             delayLockTimes[msg.sender] = now;
@@ -552,9 +573,6 @@ contract KSCBaseToken is DelayLockableToken {
 
     event KSCMintTo(address indexed controller, address indexed to, uint256 amount, string note);
     event KSCBurnFrom(address indexed controller, address indexed from, uint256 value, string note);
-
-    event KSCBurnWhenMoveToMainnet(address indexed controller, address indexed from, uint256 value, string note);
-    event KSCBurnWhenUseInSidechain(address indexed controller, address indexed from, uint256 value, string note);
 
     event KSCSell(address indexed owner, address indexed spender, address indexed to, uint256 value, string note);
     event KSCSellByOtherCoin(address indexed owner, address indexed spender, address indexed to, uint256 value,  uint256 processIdHash, uint256 userIdHash, string note);
@@ -652,42 +670,6 @@ contract KSCBaseToken is DelayLockableToken {
     }
 
     /**
-     * dev 메인넷으로 이동하며 화폐 소각.
-     */
-    function kscBurnWhenMoveToMainnet(address burner, uint256 value, string note) onlyOwner public returns (bool ret) {
-        ret = burnFrom(burner, value);
-        emit KSCBurnWhenMoveToMainnet(msg.sender, burner, value, note);
-    }
-
-    function kscBatchBurnWhenMoveToMainnet(address[] burners, uint256[] values, string note) onlyOwner public returns (bool ret) {
-        uint256 length = burners.length;
-        require(length == values.length, "The size of \'burners\' and \'values\' array is different.");
-
-        ret = true;
-        for (uint256 i = 0; i < length; i++) {
-            ret = ret && kscBurnWhenMoveToMainnet(burners[i], values[i], note);
-        }
-    }
-
-    /**
-     * dev 사이드체인에서 사용하여 화폐 소각.
-     */
-    function kscBurnWhenUseInSidechain(address burner, uint256 value, string note) onlyOwner public returns (bool ret) {
-        ret = burnFrom(burner, value);
-        emit KSCBurnWhenUseInSidechain(msg.sender, burner, value, note);
-    }
-
-    function kscBatchBurnWhenUseInSidechain(address[] burners, uint256[] values, string note) onlyOwner public returns (bool ret) {
-        uint256 length = burners.length;
-        require(length == values.length, "The size of \'burners\' and \'values\' array is different.");
-
-        ret = true;
-        for (uint256 i = 0; i < length; i++) {
-            ret = ret && kscBurnWhenUseInSidechain(burners[i], values[i], note);
-        }
-    }
-
-    /**
      * dev 이더로 KSC 를 구입하는 경우
      */
     function kscSell(
@@ -703,9 +685,9 @@ contract KSCBaseToken is DelayLockableToken {
     }
 
     /**
-     * dev 비트코인 등의 다른 코인으로 KSC 를 구입하는 경우
-     * dev EOA 가 트랜잭션을 일으켜서 처리해야 하기 때문에 다계좌를 기준으로 한다. (가스비 아끼기 위함)
-     */
+       * dev 비트코인 등의 다른 코인으로 KSC 를 구입하는 경우
+       * dev EOA 가 트랜잭션을 일으켜서 처리해야 하기 때문에 다계좌를 기준으로 한다. (가스비 아끼기 위함)
+       */
     function kscBatchSellByOtherCoin(
         address from,
         address[] to,

@@ -96,7 +96,7 @@ setTimeout(()=>{
         });
 
         describe('#delayLock()', () => {
-            it('제한 금액 3 > 5 케이스타코인으로 제한을 걸어보고 더 작게 4 케이스타코인을 걸어봄 & 출금도 테스트해보 ', async ()=>{
+            it('제한 금액 3 > 5 케이스타코인으로 제한을 걸어보고 더 작게 4 케이스타코인을 걸어봄 & 출금도 테스트해보기', async ()=>{
 
                 let beforeTime = new Date().getTime();
 
@@ -324,49 +324,49 @@ describe('KStarCoin Contract', () => {
         });
     });
 
-    describe('#kscBatchBurnWhenMoveToMainnet(),#kscBurnWhenMoveToMainnet()', () => {
-       it('Owner 권한을 가진 어카운트가 메인 체인으로 옮겼을 때의 토큰 소각',async () => {
-
-           await kStarCoin.methods.kscBatchBurnWhenMoveToMainnet(
-               [accounts[0],accounts[0],accounts[0]],
-               [web3.utils.toWei('10','ether'),web3.utils.toWei('10','ether'),web3.utils.toWei('10','ether')],
-               ''
-           ).send({
-               from : accounts[0]
-           });
-
-           const totalSupply = await kStarCoin.methods.totalSupply().call();
-           assert.equal('999999970000000000000000000',totalSupply);
-
-           kStarCoin.methods.kscBatchBurnWhenMoveToMainnet(
-               [accounts[0],accounts[0],accounts[0]],
-               [web3.utils.toWei('10','ether'),web3.utils.toWei('10','ether'),web3.utils.toWei('10','ether')],
-               ''
-           ).send({
-               from : accounts[1]
-           },(error, result) => {
-               assert.equal('revert',error.results[error.hashes[0]].error);
-           });
-
-       });
-    });
-
-    describe('#kscBatchBurnWhenUseInSidechain(),#kscBurnWhenUseInSidechain()', () => {
-       it('Owner 권한을 가진 어카운트가 사이드 체인으로 옮겼을 때의 토큰 소각',async () => {
-           kStarCoin.methods.kscBatchBurnWhenMoveToMainnet(
-               [accounts[0]],
-               [web3.utils.toWei('10','ether')],
-               ''
-           ).send({
-               from : accounts[1]
-           },(error, result) => {
-               assert.equal('revert',error.results[error.hashes[0]].error);
-           });
-
-           const totalSupply = await kStarCoin.methods.totalSupply().call();
-           assert.equal('1000000000000000000000000000',totalSupply);
-       });
-    });
+    // describe('#kscBatchBurnWhenMoveToMainnet(),#kscBurnWhenMoveToMainnet()', () => {
+    //    it('Owner 권한을 가진 어카운트가 메인 체인으로 옮겼을 때의 토큰 소각',async () => {
+    //
+    //        await kStarCoin.methods.kscBatchBurnWhenMoveToMainnet(
+    //            [accounts[0],accounts[0],accounts[0]],
+    //            [web3.utils.toWei('10','ether'),web3.utils.toWei('10','ether'),web3.utils.toWei('10','ether')],
+    //            ''
+    //        ).send({
+    //            from : accounts[0]
+    //        });
+    //
+    //        const totalSupply = await kStarCoin.methods.totalSupply().call();
+    //        assert.equal('999999970000000000000000000',totalSupply);
+    //
+    //        kStarCoin.methods.kscBatchBurnWhenMoveToMainnet(
+    //            [accounts[0],accounts[0],accounts[0]],
+    //            [web3.utils.toWei('10','ether'),web3.utils.toWei('10','ether'),web3.utils.toWei('10','ether')],
+    //            ''
+    //        ).send({
+    //            from : accounts[1]
+    //        },(error, result) => {
+    //            assert.equal('revert',error.results[error.hashes[0]].error);
+    //        });
+    //
+    //    });
+    // });
+    //
+    // describe('#kscBatchBurnWhenUseInSidechain(),#kscBurnWhenUseInSidechain()', () => {
+    //    it('Owner 권한을 가진 어카운트가 사이드 체인으로 옮겼을 때의 토큰 소각',async () => {
+    //        kStarCoin.methods.kscBatchBurnWhenMoveToMainnet(
+    //            [accounts[0]],
+    //            [web3.utils.toWei('10','ether')],
+    //            ''
+    //        ).send({
+    //            from : accounts[1]
+    //        },(error, result) => {
+    //            assert.equal('revert',error.results[error.hashes[0]].error);
+    //        });
+    //
+    //        const totalSupply = await kStarCoin.methods.totalSupply().call();
+    //        assert.equal('1000000000000000000000000000',totalSupply);
+    //    });
+    // });
 
     describe('#kscSell()', () => {
        it('payable은 아니고 사전에 이더를 보낸 사람에게 토큰을 trnasfer하는 기능임',async () => {
