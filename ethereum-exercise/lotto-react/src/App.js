@@ -56,8 +56,6 @@ class App extends Component {
 
         await lottery.methods.pickWinner().send({
             from : accounts[0]
-            // ,
-            // gas : 4000000
         });
 
         this.setState({ message : '당첨자가 선정되었습니다.' });
