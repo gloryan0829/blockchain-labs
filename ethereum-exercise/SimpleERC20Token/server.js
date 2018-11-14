@@ -14,5 +14,27 @@ app.get('/MyTokenWallet', function(req, res){
             res.writeHead(200, { 'Content-Type' : 'text/html'});
             res.end(data);
         }
-    })
+    });
+});
+
+app.get('/MyTokenWallet_OLD', function(req, res){
+    fs.readFile('MyTokenWallet_older.html', function (error, data) {
+        if (error) {
+            console.log(error);
+        } else {
+            res.writeHead(200, { 'Content-Type' : 'text/html'});
+            res.end(data);
+        }
+    });
+});
+
+app.get('/My721TokenWallet_OLD', function(req, res){
+    fs.readFile('My721TokenWallet_older.html', function (error, data) {
+        if (error) {
+            console.log(error);
+        } else {
+            res.writeHead(200, { 'Content-Type' : 'text/html'});
+            res.end(data);
+        }
+    });
 });
