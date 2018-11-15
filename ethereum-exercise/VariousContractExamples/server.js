@@ -38,3 +38,16 @@ app.get('/My721TokenWallet_OLD', function(req, res){
         }
     });
 });
+
+
+app.get('/campaign', function(req, res){
+    fs.readFile('campaign.html', function (error, data) {
+        if (error) {
+            console.log(error);
+        } else {
+            res.writeHead(200, { 'Content-Type' : 'text/html'});
+            res.end(data);
+        }
+    });
+});
+

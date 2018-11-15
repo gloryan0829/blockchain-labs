@@ -2,9 +2,9 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bignumber.js/bignumber.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js"></script>
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/npm/bignumber.js/bignumber.min.js"></script>
     <title> Token 예제</title>
     <script type="text/javascript">
         let baseBlock,
@@ -15,16 +15,17 @@
 
         let accountNames = ['이정주', '손영득', '이재훈', '양정석', '이종민', '최성호', '현수환', '조윤형', '조용환', '정재호', '크라우드 세일 컨트랙트 계정'];
 
-        const HttpRPCAddr = "http://localhost:9545";
-        const TokenAddr = "0x8cdaf0cd259887258bc13a92c0a6da92698644c0"; // Token 스마트 컨트랙트
-        const CrowdSaleAddr = "0xf12b5dd4ead5f743c6baa640b0216200e89b60da";// CrowdSale 컨트랙트 주소 (Contract Address)
+        const HttpRPCAddr = "ws://localhost:7545";
+        const TokenAddr = "0xa4ebea1cf7576d5c7c60dcc0c355e897595a9deb"; // Token 스마트 컨트랙트
+        const CrowdSaleAddr = "0x855c077298dc4c284ee74197b6704c4aa1aaf0ba";// CrowdSale 컨트랙트 주소 (Contract Address)
         const TokenABI = [{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"from","type":"address"},{"name":"to","type":"address"},{"name":"value","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"INITIAL_SUPPLY","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"to","type":"address"},{"name":"value","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"}];
 
         $(document).ready( async () => {
 
-            web3js = new Web3(new Web3.providers.HttpProvider(HttpRPCAddr));
+            web3js = new Web3(new Web3.providers.WebsocketProvider(HttpRPCAddr));
+//            web3js = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
 
-
+            console.log(web3js);
             // 현재 블록 정보
             baseBlock = await web3js.eth.getBlockNumber();
 //            document.getElementById("current_account").textContent = "접속 ERROR : 블록 정보를 가져올 수 없습니다.";
@@ -40,7 +41,7 @@
             accountOptionDraw(); // EOA 계정 콤보박스 셋팅
             currencyOptionDraw(); // 토큰 단위 콤보박스 셋팅
             accountRefresh();
-            eventInit(); // 이벤트 로그 Start...
+            watchStart(); // 이벤트 로그 Start...
 
             $.getJSON('https://ethgasstation.info/json/ethgasAPI.json', function(data) {
                 $("#gas_price").val(data['safeLow'] / 10);
@@ -93,11 +94,14 @@
                 await gameToken.methods.balanceOf(account)
                         .call()
                         .catch((error) => {
+                console.log(error);
                             if (errorChk("balanceOf 호출 실패", error.results[error.hashes[0]].error)) return;
                         });
 
             const symbol =
                 await gameToken.methods.symbol().call();
+
+            console.log(balance);
 
             $('#' + targetEl).text(balance + " " + symbol);
         }
@@ -106,7 +110,7 @@
          * @description 크라우드 세일이 보유하고 있는 토큰의 양을 불러오기 위함
          */
         function changeCrowdSaleOwner() {
-            const selectAccountIdx = $('#cwrodSaleParticipent').val();
+            const selectAccountIdx = $('#crowdSaleParticipent').val();
             balanceOf(accounts[selectAccountIdx], "tokenRemaining");
         }
 
@@ -121,6 +125,7 @@
             $("#current_account").text(accounts[currentAccount]);
             balanceOf(accounts[currentAccount], "current_balance");
 
+            console.log(accounts[currentAccount]);
             let balanceOfEther = BigNumber(await web3js.eth.getBalance(accounts[currentAccount]));
 
             if (balanceOfEther.isLessThan(1000000000000000))
@@ -129,18 +134,19 @@
                 etherMessage = "";
 
             $("#current_ether").text(balanceOfEther.toFixed() + " wei" + etherMessage);
-            $("#result").text(logs[currentAccount]);
-
+            document.getElementById("result").textContent = logs[currentAccount];
             transferFromRefresh();
             changeCrowdSaleOwner();
 
         }
 
         async function transferFromRefresh() {
+            console.log(accounts[currentAccount]);
+            console.log(accounts[$("#sel_transfer_from_names").val()]);
             const allowance =
                 await gameToken.methods.allowance(
-                    accounts[currentAccount],
-                    accounts[$("#sel_transfer_from_names").val()]
+                    accounts[$("#sel_transfer_from_names").val()],
+                    accounts[currentAccount]
                 ).call();
 
             $("#approval_value").text(allowance);
@@ -178,35 +184,35 @@
                     console.log(error);
                 });
 
-            console.log(result);
             accountRefresh();
         }
 
         async function callApprove() {
 
-            const idx = $('#sel_transfer_to_names').val();
+            const idx = $('#sel_approve_to_names').val();
 
             if (idx == currentAccount) {
                 writeLog(accountNames[idx] + " 에게  권한 주기 : 본인에게 권한을 주는 것은 의미가 없습니다.");
                 return;
             }
 
-            let approveValue = BigNumber($("#approve_value").value);
+            let approveValue = BigNumber($("#approve_value").val());
             if (approveValue.isLessThan(0)) {
-                writeLog(accountNames[i] + " 에게  권한 주기 : 0 이상의 값을 입력해주세요.");
+                writeLog(accountNames[idx] + " 에게  권한 주기 : 0 이상의 값을 입력해주세요.");
                 return;
             }
 
             approveValue = approveValue.multipliedBy(
                 $("#approve_unit option:selected").val()
             );
+            console.log(accounts[currentAccount]);
 
             const result = await gameToken.methods
                 .approve(
-                    accounts[i],
-                    approveValue.toFixed()
+                    accounts[idx],
+                    approveValue.toString()
                 )
-                .call({
+                .send({
                     from:accounts[currentAccount],
                     gasPrice:BigNumber($("#gas_price").val()).multipliedBy(1000000000)
                 })
@@ -214,7 +220,7 @@
                     console.log(error);
                 });
 
-            writeLog(accountNames[i] + " 에게  권한 주기 : (return data) " + result);
+            writeLog(accountNames[idx] + " 에게  권한 주기 : (return data) " + result);
         }
 
         function callTransferFrom() {
@@ -239,30 +245,27 @@
                 }
 
                 transferValue = transferValue.multipliedBy(document.getElementById("transfer_from_unit").value);
-                gameToken.transferFrom.call(accounts[from], accounts[to], transferValue.toFixed(), {from:accounts[currentAccount]}, function(error, result) {
-                    if (errorChk("callTransferFrom(call) 호출 실패", error)) return;
-                    if (result) {
-                        gameToken.transferFrom.sendTransaction(
-                            accounts[from],
-                            accounts[to],
-                            transferValue.toFixed(),
-                            {
-                                from:accounts[currentAccount],
-                                gasPrice:BigNumber(document.getElementById("gas_price").value).multipliedBy(1000000000)
-                            },
-                            function(error, result) {
-                                if (errorChk("callTransferFrom(transaction) 호출 실패", error)) return;
-                                writeLog(accountNames[from] + " 의  를 " + accountNames[to] + " 에게 전송 : (return data) " + result);
-                            }
-                        );
+                gameToken.methods.transferFrom(
+                    accounts[from],
+                    accounts[to],
+                    transferValue.toFixed()
+                ).send(
+                    {
+                        from:accounts[currentAccount],
+                        gasPrice:BigNumber(document.getElementById("gas_price").value).multipliedBy(1000000000)
+                    },
+                    function(error, result) {
+                        if (errorChk("callTransferFrom(transaction) 호출 실패", error)) return;
+                        writeLog(accountNames[from] + " 의  를 " + accountNames[to] + " 에게 전송 : (return data) " + result);
                     }
-                });
+                );
             }
         }
 
         async function crowdsale_exec() {
-            const crowdsale_buyer = $("#current_account").innerHTML;
-            let crowdsale_value = BigNumber($("crowdsale_value").val());
+            var crowdsale_buyer = document.getElementById("current_account").innerHTML;
+            console.log(crowdsale_buyer);
+            let crowdsale_value = BigNumber($("#crowdsale_value").val());
 
             if (crowdsale_value.isLessThan(0)) {
                 writeLog(accounts[10] + " 에게 ETH 전송 : 0 이상의 값을 입력해주세요.");
@@ -273,10 +276,11 @@
                 crowdsale_value.multipliedBy($("#eth_transfer_unit").val());
 
 
+            console.log(crowdsale_value);
             const result = await web3js.eth.sendTransaction({
                 from: crowdsale_buyer,
                 to: accounts[10],
-                value: crowdsale_value.toFixed(),
+                value: crowdsale_value,
                 gasPrice: BigNumber(document.getElementById("gas_price").value).multipliedBy(1000000000)
             }).catch((error) => {
                 console.log(error);
@@ -287,7 +291,59 @@
         }
 
         // Transaction에 의한 Event에 대한 부분 1.0.0 부터는 subscriber로 해야되는데 잘 안되고 있음..
-        function eventInit() {
+        function watchStart() {
+
+//            web3js.eth.subscribe('logs', {
+//                fromBlock : baseBlock
+//            }, function(error, result){
+////                if (!error)
+////                    console.log('callback : ',result);
+//            }).on("data", function(log){
+//                console.log('data >> ',log);
+//            }).on("changed", function(log){
+//                console.log('changed >> ', log);
+//            });
+
+            gameToken.events.Transfer({
+                fromBlock:baseBlock
+            }, (error, event) => {
+                console.log(event);
+
+                let whoFrom;
+                let whoTo;
+
+                for (let i = 0; i < accounts.length; i++) {
+                    if (event.returnValues.from == accounts[i])
+                        whoFrom = i;
+                    if (event.returnValues.to == accounts[i])
+                        whoTo = i;
+                }
+                writeLog(accountNames[whoTo] + " 에게 " + BigNumber(event.returnValues.value).toFixed() + "  전송 완료", whoFrom);
+                writeLog(accountNames[whoFrom] + " 으로부터 " + BigNumber(event.returnValues.value).toFixed() + "  전송 받음", whoTo);
+                if (whoFrom == currentAccount || whoTo == currentAccount)
+                    accountRefresh();
+            });
+
+            gameToken.events.Approval({
+                fromBlock:baseBlock
+            },(error, event) => {
+
+                let whoFrom;
+                let whoTo;
+                console.log(event);
+                for (let i = 0; i < accounts.length; i++) {
+                    if (event.returnValues.owner == accounts[i])
+                        whoFrom = i;
+                    if (event.returnValues.spender == accounts[i])
+                        whoTo = i;
+                }
+
+                writeLog(accountNames[whoTo] + " 에게 " + BigNumber(event.returnValues.value).toFixed() + "  권한 주기 완료", whoFrom);
+                writeLog(accountNames[whoFrom] + " 으로부터 " + BigNumber(event.returnValues.value).toFixed() + " 권한 받기 완료", whoTo);
+                if (whoFrom == currentAccount || whoTo == currentAccount)
+                    accountRefresh();
+            });
+
         }
 
         function writeLog(msg, i) {
@@ -372,7 +428,7 @@
 <!-- ICO 크라우드 세일 관련 ETH 송금 -> fallback 함수 에 의해 buyTokens func() 실행 후 해당 비율만큼 토큰 주기 -->
 <h2>이더 전송 하면 로 변환하여 주기 (CrowdSale Cotract)</h2>
 <div id="crowdsale">
-    <select class="nameList crowdSale" id="cwrodSaleParticipent" onchange="changeCrowdSaleOwner();"></select>
+    <select class="nameList crowdSale" id="crowdSaleParticipent" onchange="changeCrowdSaleOwner();"></select>
     (남은 <text id="tokenRemaining"></text> )
     <input type="string" id="crowdsale_value"></input>
     <select class="currencyUnitSelector" name="WEI" id="eth_transfer_unit"></select>
@@ -380,7 +436,7 @@
 </div><br/>
 
 <!-- Output 에 대한 결과 -->
-<h2>실행 결과 ( 1.0.0 는 좀 확인해봐야함 )</h2>
+<h2>실행 결과</h2>
 <div id="result" style="white-space: pre-wrap;"></div>
 </body>
 </html>

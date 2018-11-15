@@ -1,0 +1,978 @@
+<!-- solgen.io -->
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <style>
+        .feather {
+            width: 16px;
+            height: 16px;
+            vertical-align: text-bottom;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 48px 0 0;
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        }
+
+        .sidebar-sticky {
+            position: relative;
+            top: 0;
+            height: calc(100vh - 48px);
+            padding-top: .5rem;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        @supports ((position: -webkit-sticky) or (position: sticky)) {
+            .sidebar-sticky {
+                position: -webkit-sticky;
+                position: sticky;
+            }
+        }
+
+        .sidebar .nav-link {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .sidebar .nav-link .feather {
+            margin-right: 4px;
+            color: #999;
+        }
+
+        .sidebar .nav-link.active {
+            color: #007bff;
+        }
+
+        .sidebar .nav-link:hover .feather,
+        .sidebar .nav-link.active .feather {
+            color: inherit;
+        }
+
+        .sidebar-heading {
+            font-size: .75rem;
+            text-transform: uppercase;
+        }
+
+        [role="main"] {
+            padding-top: 48px;
+        }
+
+        .navbar-brand {
+            padding-top: .75rem;
+            padding-bottom: .75rem;
+            font-size: 1rem;
+            background-color: rgba(0, 0, 0, .25);
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+        }
+
+        .navbar .form-control {
+            padding: .75rem 1rem;
+            border-width: 0;
+            border-radius: 0;
+        }
+
+        .form-control-dark {
+            color: #fff;
+            background-color: rgba(255, 255, 255, .1);
+            border-color: rgba(255, 255, 255, .1);
+        }
+
+        .form-control-dark:focus {
+            border-color: transparent;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Campaign<span id="span_contract_address"></span></a>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:showContent('d');">
+                            Deploy Contract
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:showContent('c');">
+                            <span data-feather="file"></span>
+                            Call Function
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:showContent('s');">
+                            <span data-feather="file"></span>
+                            Send Function
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" id="main_d">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Deploy Contract</h1>
+            </div>
+            <div class="shadow p-3 mb-5 bg-white rounded">
+                <div class="form-group row">
+                    <label class="col-form-label col-md-4 col-lg-3">mgr(address)</label>
+                    <div class="col-md-8 col-lg-9"><input type="text" class="form-control" id="mgr" /></div>
+                </div><div class="form-group row">
+                <label class="col-form-label col-md-4 col-lg-3">minimum(uint256)</label>
+                <div class="col-md-8 col-lg-9"><input type="text" class="form-control" id="minimum"  /></div>
+            </div><div style="text-align:center;">
+                <button type="button" class="btn btn-primary" onclick="deploy();">Deploy</button>
+            </div>
+            </div>
+        </main><main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" style="display:none;" id="main_c"><div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">approvers</h1>
+    </div>
+        <div class="shadow p-3 mb-5 bg-white rounded"><div class="form-group row">
+            <label class="col-form-label col-md-4 col-lg-3">_address(address)</label>
+            <div class="col-md-8 col-lg-9"><input type="text" class="form-control" id="approvers__address" /></div>
+        </div><div style="text-align:center;">
+            <button type="button" class="btn btn-primary" onclick="getApprovers();">Call</button>
+        </div>
+        </div><div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">approversCount</h1>
+        </div>
+        <div class="shadow p-3 mb-5 bg-white rounded"><div style="text-align:center;">
+            <button type="button" class="btn btn-primary" onclick="getApproverscount();">Call</button>
+        </div>
+        </div><div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">getRequestCount</h1>
+        </div>
+        <div class="shadow p-3 mb-5 bg-white rounded"><div style="text-align:center;">
+            <button type="button" class="btn btn-primary" onclick="getGetrequestcount();">Call</button>
+        </div>
+        </div><div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">getSummary</h1>
+        </div>
+        <div class="shadow p-3 mb-5 bg-white rounded"><div style="text-align:center;">
+            <button type="button" class="btn btn-primary" onclick="getGetsummary();">Call</button>
+        </div>
+        </div><div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">manager</h1>
+        </div>
+        <div class="shadow p-3 mb-5 bg-white rounded"><div style="text-align:center;">
+            <button type="button" class="btn btn-primary" onclick="getManager();">Call</button>
+        </div>
+        </div><div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">minimumContribution</h1>
+        </div>
+        <div class="shadow p-3 mb-5 bg-white rounded"><div style="text-align:center;">
+            <button type="button" class="btn btn-primary" onclick="getMinimumcontribution();">Call</button>
+        </div>
+        </div><div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">requests</h1>
+        </div>
+        <div class="shadow p-3 mb-5 bg-white rounded"><div class="form-group row">
+            <label class="col-form-label col-md-4 col-lg-3">_uint256(uint256)</label>
+            <div class="col-md-8 col-lg-9"><input type="text" class="form-control" id="requests__uint256"  /></div>
+        </div><div style="text-align:center;">
+            <button type="button" class="btn btn-primary" onclick="getRequests();">Call</button>
+        </div>
+        </div></main><main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" style="display:none;" id="main_s"><div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">approveRequest</h1>
+    </div>
+        <div class="shadow p-3 mb-5 bg-white rounded"><div class="form-group row">
+            <label class="col-form-label col-md-4 col-lg-3">index(uint256)</label>
+            <div class="col-md-8 col-lg-9"><input type="text" class="form-control" id="approveRequest_index"  /></div>
+        </div><div style="text-align:center;">
+            <button type="button" class="btn btn-primary" onclick="setApproverequest();">Send</button>
+        </div>
+        </div><div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">contribute</h1>
+        </div>
+        <div class="shadow p-3 mb-5 bg-white rounded"><div style="text-align:center;">
+            <button type="button" class="btn btn-primary" onclick="setContribute();">Send</button>
+        </div>
+        </div><div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">createRequest</h1>
+        </div>
+        <div class="shadow p-3 mb-5 bg-white rounded"><div class="form-group row">
+            <label class="col-form-label col-md-4 col-lg-3">description(string)</label>
+            <div class="col-md-8 col-lg-9"><input type="text" class="form-control" id="createRequest_description" /></div>
+        </div><div class="form-group row">
+            <label class="col-form-label col-md-4 col-lg-3">value(uint256)</label>
+            <div class="col-md-8 col-lg-9"><input type="text" class="form-control" id="createRequest_value"  /></div>
+        </div><div class="form-group row">
+            <label class="col-form-label col-md-4 col-lg-3">recipient(address)</label>
+            <div class="col-md-8 col-lg-9"><input type="text" class="form-control" id="createRequest_recipient" /></div>
+        </div><div style="text-align:center;">
+            <button type="button" class="btn btn-primary" onclick="setCreaterequest();">Send</button>
+        </div>
+        </div><div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">finalizeRequest</h1>
+        </div>
+        <div class="shadow p-3 mb-5 bg-white rounded"><div class="form-group row">
+            <label class="col-form-label col-md-4 col-lg-3">index(uint256)</label>
+            <div class="col-md-8 col-lg-9"><input type="text" class="form-control" id="finalizeRequest_index"  /></div>
+        </div><div style="text-align:center;">
+            <button type="button" class="btn btn-primary" onclick="setFinalizerequest();">Send</button>
+        </div>
+        </div></main></div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    var myWeb3 = {};
+    var contractInstance = null;
+    var contractAddress = '0xd915a198cb2f8ad8187d4652df6b19247a946e96';
+    var contractAbi = [{"inputs":[{"name":"mgr","type":"address"},{"name":"minimum","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"constant":false,"inputs":[{"name":"index","type":"uint256"}],"name":"approveRequest","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"approvers","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"approversCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"contribute","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"description","type":"string"},{"name":"value","type":"uint256"},{"name":"recipient","type":"address"}],"name":"createRequest","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"index","type":"uint256"}],"name":"finalizeRequest","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"getRequestCount","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getSummary","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"manager","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"minimumContribution","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"requests","outputs":[{"name":"description","type":"string"},{"name":"value","type":"uint256"},{"name":"recipient","type":"address"},{"name":"complete","type":"bool"},{"name":"approvalCount","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}];
+    let contractBytecode = '0x608060405234801561001057600080fd5b5060405160408061088b83398101604052805160209091015160018054600160a060020a031916600160a060020a03909316929092179091556002556108308061005b6000396000f3006080604052600436106100ae5763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416630344100681146100b35780630a144391146100cd5780633fad1834146101025780634051ddac14610129578063481c6a751461017257806381d12c58146101a357806382fde093146102655780638a9cfd551461027a578063937e09b1146102e4578063d7bb99ba146102f9578063d7d1bbdb14610301575b600080fd5b3480156100bf57600080fd5b506100cb600435610319565b005b3480156100d957600080fd5b506100ee600160a060020a0360043516610400565b604080519115158252519081900360200190f35b34801561010e57600080fd5b50610117610415565b60408051918252519081900360200190f35b34801561013557600080fd5b5061013e61041c565b604080519586526020860194909452848401929092526060840152600160a060020a03166080830152519081900360a00190f35b34801561017e57600080fd5b50610187610439565b60408051600160a060020a039092168252519081900360200190f35b3480156101af57600080fd5b506101bb600435610448565b604051808060200186815260200185600160a060020a0316600160a060020a0316815260200184151515158152602001838152602001828103825287818151815260200191508051906020019080838360005b8381101561022657818101518382015260200161020e565b50505050905090810190601f1680156102535780820380516001836020036101000a031916815260200191505b50965050505050505060405180910390f35b34801561027157600080fd5b50610117610533565b34801561028657600080fd5b506040805160206004803580820135601f81018490048402850184019095528484526100cb9436949293602493928401919081908401838280828437509497505084359550505050602090910135600160a060020a03169050610539565b3480156102f057600080fd5b5061011761066b565b6100cb610671565b34801561030d57600080fd5b506100cb6004356106a7565b600154600090600160a060020a0316331461033357600080fd5b600080548390811061034157fe5b906000526020600020906005020190508060020160149054906101000a900460ff1615151561036f57600080fd5b60045460029004816003015411151561038757600080fd5b60028101805474ff000000000000000000000000000000000000000019167401000000000000000000000000000000000000000017908190556001820154604051600160a060020a039092169181156108fc0291906000818181858888f193505050501580156103fb573d6000803e3d6000fd5b505050565b60036020526000908152604090205460ff1681565b6000545b90565b6002546000546004546001549293303193600160a060020a031690565b600154600160a060020a031681565b600080548290811061045657fe5b60009182526020918290206005919091020180546040805160026001841615610100026000190190931692909204601f8101859004850283018501909152808252919350918391908301828280156104ef5780601f106104c4576101008083540402835291602001916104ef565b820191906000526020600020905b8154815290600101906020018083116104d257829003601f168201915b505050506001830154600284015460039094015492939092600160a060020a03821692507401000000000000000000000000000000000000000090910460ff169085565b60045481565b610541610731565b600154600160a060020a0316331461055857600080fd5b506040805160a0810182528481526020808201859052600160a060020a03841692820192909252600060608201819052608082018190528054600181018083559180528251805193949293859360059093027f290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e56301926105db92849291019061076c565b5060208201516001820155604082015160028201805460608501511515740100000000000000000000000000000000000000000274ff000000000000000000000000000000000000000019600160a060020a0390941673ffffffffffffffffffffffffffffffffffffffff1990921691909117929092169190911790556080909101516003909101555050505050565b60025481565b600254341161067f57600080fd5b336000908152600360205260409020805460ff19166001908117909155600480549091019055565b3360009081526003602052604081205460ff1615156106c557600080fd5b60008054839081106106d357fe5b600091825260208083203384526004600590930201918201905260409091205490915060ff161561070357600080fd5b3360009081526004820160205260409020805460ff1916600190811790915560039091018054909101905550565b60a06040519081016040528060608152602001600081526020016000600160a060020a03168152602001600015158152602001600081525090565b828054600181600116156101000203166002900490600052602060002090601f016020900481019282601f106107ad57805160ff19168380011785556107da565b828001600101855582156107da579182015b828111156107da5782518255916020019190600101906107bf565b506107e69291506107ea565b5090565b61041991905b808211156107e657600081556001016107f05600a165627a7a723058205f2ff0bf2c3b9e60862b00a03bfbc642f92de04f0b0f0587c1a79f24ff3457620029';
+
+
+    let getWeb3 = new Promise(function(resolve, reject) {
+// Check for injected web3 (mist/metamask)
+        if (window.ethereum) {
+            web3 = new Web3(window.ethereum);
+            try {
+                // Request account access if needed
+                console.log('ethereum', window.ethereum);
+                var eth_enable = async() => {
+                    await ethereum.enable();
+                    // Acccounts now exposed
+                    console.log('ethereum web3', web3);
+
+                    web3.eth.net.isListening((err, result) => {
+                        if(err) {
+                            reject(new Error("Unable to retrieve connection"));
+                        }else {
+                            resolve({
+                                injectedWeb3: result,
+                                web3() {
+                                    return web3;
+                                }
+                            });
+                        }
+                    });
+                };
+
+                eth_enable();
+
+            } catch (error) {
+                // User denied account access...
+            }
+        }else if (window.web3) {
+            var web3js = window.web3;
+            var web3 = new Web3(web3js.currentProvider);
+
+            web3.eth.net.isListening((err, result) => {
+                if(err) {
+                    reject(new Error("Unable to retrieve connection"));
+                }else {
+                    resolve({
+                        injectedWeb3: result,
+                        web3() {
+                            return web3;
+                        }
+                    });
+                }
+            });
+        } else {
+            reject(new Error("Unable to connect to Metamask"));
+        }
+    })
+        .then(result => {
+            return new Promise(function(resolve, reject) {
+                result.web3().eth.net.getId((err, networkId) => {
+                    if (err) {
+                        // If we can't find a networkId keep result the same and reject the promise
+                        reject(new Error("Unable to retrieve network ID"));
+                    } else {
+                        // Assign the networkId property to our result and resolve promise
+                        result = Object.assign({}, result, { networkId });
+                        resolve(result);
+                    }
+                });
+            });
+        })
+        .then(result => {
+            return new Promise(function(resolve, reject) {
+                // Retrieve coinbase
+                result.web3().eth.getCoinbase((err, coinbase) => {
+                    if (err) {
+                        reject(new Error("Unable to retrieve coinbase"));
+                    } else {
+                        result = Object.assign({}, result, { coinbase });
+                        resolve(result);
+                    }
+                });
+            });
+        })
+        .then(result => {
+            return new Promise(function(resolve, reject) {
+                result.web3().eth.net.getNetworkType((err, networkName) => {
+                    if (err) {
+                        reject(new Error("Unable to get network name"));
+                    } else {
+                        result = Object.assign({}, result, { networkName });
+                        resolve(result);
+                    }
+                });
+            });
+        })
+        .then(result => {
+            return new Promise(function(resolve, reject) {
+                // Retrieve balance for coinbase
+                result.web3().eth.getBalance(result.coinbase, (err, balance) => {
+                    if (err) {
+                        reject(
+                            new Error(
+                                "Unable to retrieve balance for address: " + result.coinbase
+                            )
+                        );
+                    } else {
+                        result = Object.assign({}, result, { balance });
+                        resolve(result);
+                    }
+                });
+            });
+        });
+
+    $(document).ready(function(){
+        getWeb3
+            .then(result => {
+                myWeb3.coinbase = result.coinbase;
+                myWeb3.networkId = result.networkId;
+                myWeb3.networkName = result.networkName;
+                myWeb3.balance = parseInt(result.balance, 10);
+                myWeb3.isInjected = result.injectedWeb3;
+                myWeb3.web3Instance = result.web3;
+
+
+                const web3Ins = myWeb3.web3Instance();
+                contractInstance = new web3Ins.eth.Contract(
+                    contractAbi,
+                    myWeb3.coinbase
+                );
+
+                console.log(contractInstance);
+            })
+            .catch(e => {
+                console.log("error in action registerWeb3", e);
+            });
+    });
+
+    function showContent(type) {
+        $('#main_d').hide();
+        $('#main_c').hide();
+        $('#main_s').hide();
+        $('#main_'+type).show();
+    }
+
+    function deploy() {
+        var mgr = $('#mgr').val();
+        if(mgr==''){
+            swal({title:'Please input the mgr',icon:'error'});
+            return;
+        }
+
+        mgr = getParamValue(mgr, 'address');
+        var minimum = $('#minimum').val();
+        if(minimum==''){
+            swal({title:'Please input the minimum',icon:'error'});
+            return;
+        }
+
+        minimum = getParamValue(minimum, 'uint256');
+
+        swal({
+            title: "Are you sure to deploy smart contract?",
+            icon: "warning",
+            buttons: {
+                cancel: true,
+                confirm: {
+                    text: "OK",
+                    value: true,
+                    visible: true,
+                    className: "",
+                    closeModal: false
+                }
+            },
+            dangerMode: true
+        }).then(status => {
+            if (status) {
+                deployContract(mgr, minimum).then(result => {
+                    swal({ title: "The Contract has created.", icon: "success" });
+                });
+            }
+        });
+    }
+    function setApproverequest() {
+        if(contractAddress == '') {
+            swal('Please deploy a contract.');
+            return;
+        }
+        var index = $('#approveRequest_index').val();
+        if(index==''){
+            swal({title:'Please input the index',icon:'error'});
+            return;
+        }
+
+        index = getParamValue(index, 'uint256');
+
+        swal({
+            title: "Are you sure to execute approveRequest?",
+            icon: "warning",
+            buttons: {
+                cancel: true,
+                confirm: {
+                    text: "OK",
+                    value: true,
+                    visible: true,
+                    className: "",
+                    closeModal: false
+                }
+            },
+            dangerMode: true
+        }).then(status => {
+            if (status) {
+                sendApproverequest(index).then(result => {
+                    swal("transactionHash : " + result.transactionHash);
+                });
+            }
+        });
+    }
+    function getApprovers() {
+        if(contractAddress == '') {
+            swal('Please deploy a contract.');
+            return;
+        }
+        var _address = $('#approvers__address').val();
+        if(_address==''){
+            swal({title:'Please input the _address',icon:'error'});
+            return;
+        }
+
+        _address = getParamValue(_address, 'address');
+
+        callApprovers(_address).then(result => {
+            if (typeof result === "object") {
+                swal('approvers' + ' : ' + JSON.stringify(result));
+            }else {
+                swal('approvers' + ' : ' + result);
+            }
+        });
+    }
+
+    function getApproverscount() {
+        if(contractAddress == '') {
+            swal('Please deploy a contract.');
+            return;
+        }
+        callApproverscount().then(result => {
+            if (typeof result === "object") {
+                swal('approversCount' + ' : ' + JSON.stringify(result));
+            }else {
+                swal('approversCount' + ' : ' + result);
+            }
+        });
+    }
+
+    function setContribute() {
+        if(contractAddress == '') {
+            swal('Please deploy a contract.');
+            return;
+        }
+
+        swal({
+            title: "Are you sure to execute contribute?",
+            icon: "warning",
+            buttons: {
+                cancel: true,
+                confirm: {
+                    text: "OK",
+                    value: true,
+                    visible: true,
+                    className: "",
+                    closeModal: false
+                }
+            },
+            dangerMode: true
+        }).then(status => {
+            if (status) {
+                sendContribute().then(result => {
+                    swal("transactionHash : " + result.transactionHash);
+                });
+            }
+        });
+    }
+    function setCreaterequest() {
+        if(contractAddress == '') {
+            swal('Please deploy a contract.');
+            return;
+        }
+        var description = $('#createRequest_description').val();
+        if(description==''){
+            swal({title:'Please input the description',icon:'error'});
+            return;
+        }
+
+        description = getParamValue(description, 'string');
+        var value = $('#createRequest_value').val();
+        if(value==''){
+            swal({title:'Please input the value',icon:'error'});
+            return;
+        }
+
+        value = getParamValue(value, 'uint256');
+        var recipient = $('#createRequest_recipient').val();
+        if(recipient==''){
+            swal({title:'Please input the recipient',icon:'error'});
+            return;
+        }
+
+        recipient = getParamValue(recipient, 'address');
+
+        swal({
+            title: "Are you sure to execute createRequest?",
+            icon: "warning",
+            buttons: {
+                cancel: true,
+                confirm: {
+                    text: "OK",
+                    value: true,
+                    visible: true,
+                    className: "",
+                    closeModal: false
+                }
+            },
+            dangerMode: true
+        }).then(status => {
+            if (status) {
+                sendCreaterequest(description, value, recipient).then(result => {
+                    swal("transactionHash : " + result.transactionHash);
+                });
+            }
+        });
+    }
+    function setFinalizerequest() {
+        if(contractAddress == '') {
+            swal('Please deploy a contract.');
+            return;
+        }
+        var index = $('#finalizeRequest_index').val();
+        if(index==''){
+            swal({title:'Please input the index',icon:'error'});
+            return;
+        }
+
+        index = getParamValue(index, 'uint256');
+
+        swal({
+            title: "Are you sure to execute finalizeRequest?",
+            icon: "warning",
+            buttons: {
+                cancel: true,
+                confirm: {
+                    text: "OK",
+                    value: true,
+                    visible: true,
+                    className: "",
+                    closeModal: false
+                }
+            },
+            dangerMode: true
+        }).then(status => {
+            if (status) {
+                sendFinalizerequest(index).then(result => {
+                    swal("transactionHash : " + result.transactionHash);
+                });
+            }
+        });
+    }
+    function getGetrequestcount() {
+        if(contractAddress == '') {
+            swal('Please deploy a contract.');
+            return;
+        }
+        callGetrequestcount().then(result => {
+            if (typeof result === "object") {
+                swal('getRequestCount' + ' : ' + JSON.stringify(result));
+            }else {
+                swal('getRequestCount' + ' : ' + result);
+            }
+        });
+    }
+
+    function getGetsummary() {
+        if(contractAddress == '') {
+            swal('Please deploy a contract.');
+            return;
+        }
+        callGetsummary().then(result => {
+            if (typeof result === "object") {
+                swal('getSummary' + ' : ' + JSON.stringify(result));
+            }else {
+                swal('getSummary' + ' : ' + result);
+            }
+        });
+    }
+
+    function getManager() {
+        if(contractAddress == '') {
+            swal('Please deploy a contract.');
+            return;
+        }
+        callManager().then(result => {
+            if (typeof result === "object") {
+                swal('manager' + ' : ' + JSON.stringify(result));
+            }else {
+                swal('manager' + ' : ' + result);
+            }
+        });
+    }
+
+    function getMinimumcontribution() {
+        if(contractAddress == '') {
+            swal('Please deploy a contract.');
+            return;
+        }
+        callMinimumcontribution().then(result => {
+            if (typeof result === "object") {
+                swal('minimumContribution' + ' : ' + JSON.stringify(result));
+            }else {
+                swal('minimumContribution' + ' : ' + result);
+            }
+        });
+    }
+
+    function getRequests() {
+        if(contractAddress == '') {
+            swal('Please deploy a contract.');
+            return;
+        }
+        var _uint256 = $('#requests__uint256').val();
+        if(_uint256==''){
+            swal({title:'Please input the _uint256',icon:'error'});
+            return;
+        }
+
+        _uint256 = getParamValue(_uint256, 'uint256');
+
+        callRequests(_uint256).then(result => {
+            if (typeof result === "object") {
+                swal('requests' + ' : ' + JSON.stringify(result));
+            }else {
+                swal('requests' + ' : ' + result);
+            }
+        });
+    }
+
+
+    function getParamValue(val, type) {
+        let web3Instance = myWeb3.web3Instance();
+
+        if(type.indexOf('byte') > -1 && type.indexOf('[]') > -1){
+            var vals = val.split(',');
+            var arr = [];
+            vals.forEach(item => {
+                arr.push(web3Instance.utils.asciiToHex(item));
+            });
+
+            return arr;
+        }else if(type.indexOf('byte') > -1) {
+            return web3Instance.utils.asciiToHex(val);
+        }else if(type.indexOf('[]') > -1) {
+            return val.split(',');
+        }else {
+            return val;
+        }
+    }
+
+    function deployContract(mgr, minimum) {
+        let web3Instance = myWeb3.web3Instance();
+
+        return new Promise((resolve, reject) => {
+            var _arguments = [mgr, minimum];
+            var _constructor_abi = web3Instance.eth.abi.encodeParameters(
+                ['address', 'uint256'],
+                _arguments
+            );
+
+            let MyContract = new web3Instance.eth.Contract(
+                contractAbi,
+                myWeb3.coinbase
+            );
+
+            var options = {
+                from: myWeb3.coinbase,
+                data: contractBytecode,
+                arguments: _arguments
+            };
+
+            var result = MyContract.deploy(options).estimateGas().then(gasAmount => {
+                var gasLimit = Math.floor(gasAmount * 1.2);
+                if(gasLimit > 4700000) gasLimit = 4700000;
+
+                MyContract.deploy(options).send(
+                    {
+                        from: myWeb3.coinbase,
+                        gas: gasLimit,
+                        gasPrice: 8000000000
+                    },
+                    function(error, transactionHash) {}
+                ).on("error", function(error) {
+                    console.log("error", error);
+                    reject(new Error('failed'));
+                }).on("transactionHash", function(transactionHash) {
+                    console.log("transactionHash", transactionHash);
+                }).on("receipt", function(receipt) {
+                    console.log("receipt", receipt);
+                    console.log("contractAddress", receipt.contractAddress);
+                }).on("confirmation", function(confirmationNumber, receipt) {
+                    console.log("confirmationNumber", confirmationNumber);
+                }).then(function(newContractInstance) {
+                    console.log("contractInstance", newContractInstance);
+                    console.log("newContractInstance.options.address",newContractInstance.options.address);
+
+                    contractInstance = newContractInstance;
+                    contractAddress = newContractInstance.options.address;
+                    $('#span_contract_address').html('(' + contractAddress + ')');
+                    setContractInstance(contractAddress);
+                    resolve(newContractInstance);
+                });
+            }).catch(function(error) {
+                console.log(error);
+            });
+        });
+    }
+
+    function setContractInstance(contract_address) {
+        let web3Instance = myWeb3.web3Instance();
+
+        contractInstance = new web3Instance.eth.Contract(
+            contractAbi,
+            contract_address
+        );
+    }
+
+    function sendApproverequest (index) {
+        return new Promise((resolve, reject) => {
+            contractInstance.methods.approveRequest(index).estimateGas({from:myWeb3.coinbase}).then(gasAmount => {
+                var gasLimit = Math.floor(gasAmount * 1.2);
+                if(gasLimit > 4700000) gasLimit = 4700000;
+
+                contractInstance.methods.approveRequest(index).send(
+                    {
+                        from:myWeb3.coinbase,
+                        gas: gasLimit,
+                        gasPrice: 8000000000
+                    }
+                ).on("error", function(error) {
+                    console.log("error", error);
+                    reject(error);
+                }).on("transactionHash", function(transactionHash) {
+                    console.log("transactionHash", transactionHash);
+                }).on("receipt", function(receipt) {
+                    console.log("receipt", receipt);
+                    console.log("contractAddress", receipt.contractAddress);
+                }).on("confirmation", function(confirmationNumber, receipt) {
+                    console.log("confirmationNumber", confirmationNumber);
+                }).then(function(result){
+                    console.log('approveRequest', result);
+                    resolve(result);
+                });
+            });
+        });
+    }
+
+    function callApprovers (_address) {
+        return new Promise((resolve, reject) => {
+            contractInstance.methods
+                .approvers(_address)
+                .call()
+                .then(result => {
+                    console.log("approvers", result);
+                    resolve(result);
+                });
+        });
+    }
+
+
+    function callApproverscount () {
+        return new Promise((resolve, reject) => {
+            contractInstance.methods
+                .approversCount()
+                .call()
+                .then(result => {
+                    console.log("approversCount", result);
+                    resolve(result);
+                });
+        });
+    }
+
+
+    function sendContribute () {
+        return new Promise((resolve, reject) => {
+            contractInstance.methods.contribute().estimateGas({from:myWeb3.coinbase}).then(gasAmount => {
+                var gasLimit = Math.floor(gasAmount * 1.2);
+                if(gasLimit > 4700000) gasLimit = 4700000;
+
+                contractInstance.methods.contribute().send(
+                    {
+                        from:myWeb3.coinbase,
+                        gas: gasLimit,
+                        gasPrice: 8000000000
+                    }
+                ).on("error", function(error) {
+                    console.log("error", error);
+                    reject(error);
+                }).on("transactionHash", function(transactionHash) {
+                    console.log("transactionHash", transactionHash);
+                }).on("receipt", function(receipt) {
+                    console.log("receipt", receipt);
+                    console.log("contractAddress", receipt.contractAddress);
+                }).on("confirmation", function(confirmationNumber, receipt) {
+                    console.log("confirmationNumber", confirmationNumber);
+                }).then(function(result){
+                    console.log('contribute', result);
+                    resolve(result);
+                });
+            });
+        });
+    }
+
+    function sendCreaterequest (description, value, recipient) {
+        return new Promise((resolve, reject) => {
+            contractInstance.methods.createRequest(description, value, recipient).estimateGas({from:myWeb3.coinbase}).then(gasAmount => {
+                var gasLimit = Math.floor(gasAmount * 1.2);
+                if(gasLimit > 4700000) gasLimit = 4700000;
+
+                contractInstance.methods.createRequest(description, value, recipient).send(
+                    {
+                        from:myWeb3.coinbase,
+                        gas: gasLimit,
+                        gasPrice: 8000000000
+                    }
+                ).on("error", function(error) {
+                    console.log("error", error);
+                    reject(error);
+                }).on("transactionHash", function(transactionHash) {
+                    console.log("transactionHash", transactionHash);
+                }).on("receipt", function(receipt) {
+                    console.log("receipt", receipt);
+                    console.log("contractAddress", receipt.contractAddress);
+                }).on("confirmation", function(confirmationNumber, receipt) {
+                    console.log("confirmationNumber", confirmationNumber);
+                }).then(function(result){
+                    console.log('createRequest', result);
+                    resolve(result);
+                });
+            });
+        });
+    }
+
+    function sendFinalizerequest (index) {
+        return new Promise((resolve, reject) => {
+            contractInstance.methods.finalizeRequest(index).estimateGas({from:myWeb3.coinbase}).then(gasAmount => {
+                var gasLimit = Math.floor(gasAmount * 1.2);
+                if(gasLimit > 4700000) gasLimit = 4700000;
+
+                contractInstance.methods.finalizeRequest(index).send(
+                    {
+                        from:myWeb3.coinbase,
+                        gas: gasLimit,
+                        gasPrice: 8000000000
+                    }
+                ).on("error", function(error) {
+                    console.log("error", error);
+                    reject(error);
+                }).on("transactionHash", function(transactionHash) {
+                    console.log("transactionHash", transactionHash);
+                }).on("receipt", function(receipt) {
+                    console.log("receipt", receipt);
+                    console.log("contractAddress", receipt.contractAddress);
+                }).on("confirmation", function(confirmationNumber, receipt) {
+                    console.log("confirmationNumber", confirmationNumber);
+                }).then(function(result){
+                    console.log('finalizeRequest', result);
+                    resolve(result);
+                });
+            });
+        });
+    }
+
+    function callGetrequestcount () {
+        return new Promise((resolve, reject) => {
+            contractInstance.methods
+                .getRequestCount()
+                .call()
+                .then(result => {
+                    console.log("getRequestCount", result);
+                    resolve(result);
+                });
+        });
+    }
+
+
+    function callGetsummary () {
+        return new Promise((resolve, reject) => {
+            contractInstance.methods
+                .getSummary()
+                .call()
+                .then(result => {
+                    console.log("getSummary", result);
+                    resolve(result);
+                });
+        });
+    }
+
+
+    function callManager () {
+        return new Promise((resolve, reject) => {
+            contractInstance.methods
+                .manager()
+                .call()
+                .then(result => {
+                    console.log("manager", result);
+                    resolve(result);
+                });
+        });
+    }
+
+
+    function callMinimumcontribution () {
+        return new Promise((resolve, reject) => {
+            contractInstance.methods
+                .minimumContribution()
+                .call()
+                .then(result => {
+                    console.log("minimumContribution", result);
+                    resolve(result);
+                });
+        });
+    }
+
+
+    function callRequests (_uint256) {
+        return new Promise((resolve, reject) => {
+            contractInstance.methods
+                .requests(_uint256)
+                .call()
+                .then(result => {
+                    console.log("requests", result);
+                    resolve(result);
+                });
+        });
+    }
+
+</script>
+</body>
+</html>
