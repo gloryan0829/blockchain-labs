@@ -33,4 +33,3 @@ contract Lottery {
         return players;
     }
 }
-
