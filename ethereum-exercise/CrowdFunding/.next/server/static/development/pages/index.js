@@ -106,53 +106,34 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! semantic-ui-react */ "semantic-ui-react");
 /* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(semantic_ui_react__WEBPACK_IMPORTED_MODULE_1__);
-var _jsxFileName = "/Users/Double_J/DevWorkspace/blockchain-labs/ethereum-exercise/CrowdFunding/components/Header.js";
+/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../routes */ "./routes.js");
+/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_routes__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = (function () {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_1__["Menu"], {
     style: {
       marginTop: '5px'
-    },
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 6
-    },
-    __self: this
+    }
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("link", {
     rel: "stylesheet",
-    href: "//cdn.jsdelivr.net/npm/semantic-ui@2.4.0/dist/semantic.min.css",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 7
-    },
-    __self: this
-  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_1__["Menu"].Item, {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 11
-    },
-    __self: this
-  }, "\uD06C\uB77C\uC6B0\uB4DC\uCF54\uC778"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_1__["Menu"].Menu, {
-    position: "right",
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 14
-    },
-    __self: this
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_1__["Menu"].Item, {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 15
-    },
-    __self: this
-  }, "\uD380\uB529"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_1__["Menu"].Item, {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 18
-    },
-    __self: this
-  }, "+")));
+    href: "//cdn.jsdelivr.net/npm/semantic-ui@2.4.0/dist/semantic.min.css"
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_routes__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+    route: "/"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    className: "item"
+  }, "\uD06C\uB77C\uC6B0\uB4DC\uCF54\uC778")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_1__["Menu"].Menu, {
+    position: "right"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_routes__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+    route: "/"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    className: "item"
+  }, "\uD380\uB529")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_routes__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+    route: "/campaigns/new"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+    className: "item"
+  }, "+"))));
 });
 
 /***/ }),
@@ -232,19 +213,50 @@ var instance = new _web3__WEBPACK_IMPORTED_MODULE_0__["default"].eth.Contract(JS
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var web3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! web3 */ "web3");
-/* harmony import */ var web3__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(web3__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "@babel/runtime/regenerator");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var web3__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! web3 */ "web3");
+/* harmony import */ var web3__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(web3__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
  // const web3 = new Web3(window.web3.currentProvider); 서버사이드코드라 윈도우 객체가 없는것은 당연하다
 
 var web3;
 
-if (typeof window !== 'undefined' && typeof window.web3 !== 'undefined') {
-  web3 = new web3__WEBPACK_IMPORTED_MODULE_0___default.a(window.web3.currentProvider); // 브라우저가 동작한 상태와 MetaMask가 구동될 때...
-} else {
-  // 위와 다르게 브라우저가 아닌 상황에서 HttpProvider로 객체 생성..
-  var provider = new web3__WEBPACK_IMPORTED_MODULE_0___default.a.providers.HttpProvider('https://rinkeby.infura.io/v3/8326226fd5694e83b2bbe607b0d8afce');
-  web3 = new web3__WEBPACK_IMPORTED_MODULE_0___default.a(provider);
-}
+_asyncToGenerator(
+/*#__PURE__*/
+_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+  var provider;
+  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+          if (typeof window !== 'undefined' && typeof window.Web3 !== 'undefined') {
+            web3 = new web3__WEBPACK_IMPORTED_MODULE_1___default.a(window.web3.currentProvider); // 브라우저가 동작한 상태와 MetaMask가 구동될 때...
+            // web3 = new Web3(window.ethereum);
+            // console.log(123);
+            // try {
+            //     await ethereum.enable();
+            // } catch (error) {
+            //     console.error('MetaMask accounts access denied...')
+            // }
+          } else {
+            // 위와 다르게 브라우저가 아닌 상황에서 HttpProvider로 객체 생성..
+            provider = new web3__WEBPACK_IMPORTED_MODULE_1___default.a.providers.HttpProvider('https://rinkeby.infura.io/v3/8326226fd5694e83b2bbe607b0d8afce');
+            web3 = new web3__WEBPACK_IMPORTED_MODULE_1___default.a(provider);
+          }
+
+        case 1:
+        case "end":
+          return _context.stop();
+      }
+    }
+  }, _callee, this);
+}))();
 
 /* harmony default export */ __webpack_exports__["default"] = (web3);
 
@@ -267,8 +279,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! semantic-ui-react */ "semantic-ui-react");
 /* harmony import */ var semantic_ui_react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _components_Layout__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Layout */ "./components/Layout.js");
+/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../routes */ "./routes.js");
+/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_routes__WEBPACK_IMPORTED_MODULE_5__);
 
-var _jsxFileName = "/Users/Double_J/DevWorkspace/blockchain-labs/ethereum-exercise/CrowdFunding/pages/index.js";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -297,14 +310,10 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var CardExampleGroupProps = function CardExampleGroupProps() {
   return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__["Card"].Group, {
-    items: items,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 6
-    },
-    __self: this
+    items: items
   });
 };
 
@@ -325,51 +334,27 @@ function (_Component) {
       var items = this.props.campaigns.map(function (address) {
         return {
           header: address,
-          description: react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("a", {
-            __source: {
-              fileName: _jsxFileName,
-              lineNumber: 23
-            },
-            __self: this
-          }, "\uD380\uB529 \uB9AC\uC2A4\uD2B8"),
+          description: react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_routes__WEBPACK_IMPORTED_MODULE_5__["Link"], {
+            route: "/campaigns/".concat(address)
+          }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("a", null, "\uD380\uB529 \uB9AC\uC2A4\uD2B8")),
           fluid: true
         };
       });
       return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__["Card"].Group, {
-        items: items,
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 28
-        },
-        __self: this
+        items: items
       });
     }
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_Layout__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 33
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 34
-        },
-        __self: this
-      }, this.renderCampaign(), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+      return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_components_Layout__WEBPACK_IMPORTED_MODULE_4__["default"], null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, this.renderCampaign(), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_routes__WEBPACK_IMPORTED_MODULE_5__["Link"], {
+        route: "/campaigns/new"
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(semantic_ui_react__WEBPACK_IMPORTED_MODULE_3__["Button"], {
         content: "\uD06C\uB77C\uC6B0\uB4DC\uD380\uB529 \uC0DD\uC131",
         icon: "add circle",
         color: "orange",
-        floated: "right",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 36
-        },
-        __self: this
-      })));
+        floated: "right"
+      }))));
     }
   }], [{
     key: "getInitialProps",
@@ -387,11 +372,12 @@ function (_Component) {
 
               case 2:
                 campaigns = _context.sent;
+                console.log(campaigns);
                 return _context.abrupt("return", {
                   campaigns: campaigns
                 });
 
-              case 4:
+              case 5:
               case "end":
                 return _context.stop();
             }
@@ -409,6 +395,20 @@ function (_Component) {
 }(react__WEBPACK_IMPORTED_MODULE_1__["Component"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (CampaignIndex);
+
+/***/ }),
+
+/***/ "./routes.js":
+/*!*******************!*\
+  !*** ./routes.js ***!
+  \*******************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var routes = __webpack_require__(/*! next-routes */ "next-routes")();
+
+routes.add('/campaigns/new', '/campaigns/new').add('/campaigns/:address', '/campaigns/show');
+module.exports = routes;
 
 /***/ }),
 
@@ -432,6 +432,17 @@ module.exports = __webpack_require__(/*! ./pages/index.js */"./pages/index.js");
 /***/ (function(module, exports) {
 
 module.exports = require("@babel/runtime/regenerator");
+
+/***/ }),
+
+/***/ "next-routes":
+/*!******************************!*\
+  !*** external "next-routes" ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("next-routes");
 
 /***/ }),
 

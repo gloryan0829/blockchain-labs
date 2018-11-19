@@ -3,6 +3,7 @@ import {Form, Input, Button, Message} from 'semantic-ui-react';
 import factory from '../../contracts/factory';
 import Layout from '../../components/Layout';
 import web3 from '../../contracts/web3';
+import { Router } from '../../routes';
 
 class CampaignNew extends Component {
 
@@ -25,6 +26,9 @@ class CampaignNew extends Component {
             await factory.methods.createCampaign(this.state.minimumContribution).send({
                     from : accounts[0]
             });
+
+            // 인덱스 페이지로 이동...
+            Router.pushRoute('/');
         } catch (err) {
             console.log(err);
             this.setState({ errorMsg : err.message });
