@@ -23,7 +23,7 @@ class CampaignIndex extends Component {
                 header : address,
                 description : (
                     <Link route={`/campaigns/${address}`}>
-                        <a>펀딩 리스트</a>
+                        <a>캠페인 상세보기</a>
                     </Link>
                 ),
                 fluid : true

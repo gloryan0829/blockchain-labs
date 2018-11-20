@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "dev": "nodemon server.js"
+    "dev": "node server.js",
+    "deploy": "node contracts/deploy.js"
   },
   "author": "",
   "license": "ISC",

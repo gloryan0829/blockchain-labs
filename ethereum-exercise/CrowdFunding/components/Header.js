@@ -11,12 +11,12 @@ export default () => {
           </link>
           <Link route="/">
             <a className="item">
-                크라우드코인
+                크라우드펀딩
             </a>
           </Link>
           <Menu.Menu position="right">
             <Link route="/">
-                <a className="item">펀딩</a>
+                <a className="item">캠페인리스트</a>
             </Link>
             <Link route="/campaigns/new">
                 <a className="item">+</a>
