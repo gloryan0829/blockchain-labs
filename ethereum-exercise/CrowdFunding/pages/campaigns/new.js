@@ -26,7 +26,14 @@ class CampaignNew extends Component {
             console.log(accounts);
             await factory.methods.createCampaign(this.state.minimumContribution).send({
                     from : accounts[0]
-            });
+            }).on('transactionHash', function(hash){
+                console.log('hash >> ', hash);
+            }).on('receipt', function(receipt){
+                console.log('receipt >> ', receipt);
+            }).on('confirmation', function(confirmationNumber, receipt){
+                console.log('confirmation >> ', confirmationNumber);
+                if(confirmationNumber === 24) { console.log('완료') }
+            }).on('error', console.error);
 
             // 인덱스 페이지로 이동...
             Router.pushRoute('/');

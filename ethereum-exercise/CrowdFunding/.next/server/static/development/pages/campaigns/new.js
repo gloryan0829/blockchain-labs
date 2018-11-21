@@ -88,7 +88,7 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -363,7 +363,17 @@ function (_Component) {
                 _context.next = 9;
                 return _contracts_factory__WEBPACK_IMPORTED_MODULE_3__["default"].methods.createCampaign(_this.state.minimumContribution).send({
                   from: accounts[0]
-                });
+                }).on('transactionHash', function (hash) {
+                  console.log('hash >> ', hash);
+                }).on('receipt', function (receipt) {
+                  console.log('receipt >> ', receipt);
+                }).on('confirmation', function (confirmationNumber, receipt) {
+                  console.log('confirmation >> ', confirmationNumber);
+
+                  if (confirmationNumber === 24) {
+                    console.log('완료');
+                  }
+                }).on('error', console.error);
 
               case 9:
                 // 인덱스 페이지로 이동...
@@ -456,7 +466,7 @@ module.exports = routes;
 
 /***/ }),
 
-/***/ 6:
+/***/ 4:
 /*!**************************************!*\
   !*** multi ./pages/campaigns/new.js ***!
   \**************************************/
