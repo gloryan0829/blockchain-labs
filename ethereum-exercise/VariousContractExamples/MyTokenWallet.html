@@ -121,6 +121,7 @@
             if (accounts == null) return;
 
             currentAccount = $('#sel_names').val();
+            console.log(currentAccount);
 
             $("#current_account").text(accounts[currentAccount]);
             balanceOf(accounts[currentAccount], "current_balance");
