@@ -1,5 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
+var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 
 module.exports = {
   entry: './src/main.js',
@@ -8,6 +9,17 @@ module.exports = {
     publicPath: '/dist/',
     filename: 'build.js'
   },
+  plugins : [
+    new SWPrecacheWebpackPlugin({
+      cacheId : 'pwa-offline-v4',
+      filename : 'service-worker.js',
+      staticFileGlobs : [
+        'index.html',
+        'manifest.json'
+      ],
+      mergeStaticsConfig : true
+    })
+  ],
   module: {
     rules: [
       {
@@ -44,35 +56,5 @@ module.exports = {
       'vue$': 'vue/dist/vue.esm.js'
     },
     extensions: ['*', '.js', '.vue', '.json']
-  },
-  devServer: {
-    historyApiFallback: true,
-    noInfo: true,
-    overlay: true
-  },
-  performance: {
-    hints: false
-  },
-  devtool: '#eval-source-map'
-}
-
-if (process.env.NODE_ENV === 'production') {
-  module.exports.devtool = '#source-map'
-  // http://vue-loader.vuejs.org/en/workflow/production.html
-  module.exports.plugins = (module.exports.plugins || []).concat([
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: '"production"'
-      }
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false
-      }
-    }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true
-    })
-  ])
+  }
 }

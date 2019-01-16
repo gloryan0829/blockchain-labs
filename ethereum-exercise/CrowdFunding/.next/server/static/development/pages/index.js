@@ -199,7 +199,7 @@ __webpack_require__.r(__webpack_exports__);
 var _build_CampaignFactory_json__WEBPACK_IMPORTED_MODULE_1___namespace = /*#__PURE__*/__webpack_require__.t(/*! ./build/CampaignFactory.json */ "./contracts/build/CampaignFactory.json", 1);
 
 
-var instance = new _web3__WEBPACK_IMPORTED_MODULE_0__["default"].eth.Contract(JSON.parse(_build_CampaignFactory_json__WEBPACK_IMPORTED_MODULE_1__.interface), '0x56b6f9057ba75B1cB24b144195c279a63facF34d');
+var instance = new _web3__WEBPACK_IMPORTED_MODULE_0__["default"].eth.Contract(JSON.parse(_build_CampaignFactory_json__WEBPACK_IMPORTED_MODULE_1__.interface), '0x6cEb5bD3184BDDE3Ce9E64563Dd0840765454541');
 /* harmony default export */ __webpack_exports__["default"] = (instance);
 
 /***/ }),

@@ -1,0 +1,21 @@
+{
+    "short_name" : "PWA Day34 Studio",
+    "name" : "PWA Captain Chain",
+    "icons" : [{
+        "src" : "src/assets/icon_512.png",
+        "type" : "image/png",
+        "sizes" : "512x512"
+    },{
+        "src" : "src/assets/icon_128.png",
+        "type" : "image/png",
+        "sizes" : "128x128"
+    },{
+        "src" : "src/assets/icon_32.png",
+        "type" : "image/png",
+        "sizes" : "32x32"
+    }],
+    "background_color" : "#FDFDFD",
+    "start_url" : "./",
+    "display": "standalone",
+    "orientation": "portrait"
+}

@@ -4,6 +4,7 @@ const solc = require('solc');
 
 //build 폴더 삭제
 const buildPath = path.resolve(__dirname, 'build');
+console.log(buildPath);
 fs.removeSync(buildPath);
 
 const campaignPath = path.resolve(__dirname, 'Campaign.sol');

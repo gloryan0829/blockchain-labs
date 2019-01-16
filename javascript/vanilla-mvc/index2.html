@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<meta charset="UTF-8">
+        <title>web3js활용</title>
+		
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.js"></script>
+                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bignumber.js/bignumber.min.js"></script>
+        		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+		<script>
+				
+		let Web3 = require('web3');
+				//console.log(web3);
+				
+				if (typeof web3 !== 'undefined') 
+				{
+					web3 = new Web3(window.web3.currentProvider); //Meta Mask 접속 시
+					// web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io'));
+					console.log("meta mask!");
+				} 
+				else 
+				{
+					web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+					console.log("No!! meta mask!");
+				}
+				console.log("web3js api version >> ", web3.version.api); // web3 verson
+		
+		var contractAddr = "0x899099b093885334cb3563631e8065c3f60b063d";
+		var contractABI = [
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "myFunction",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "pure",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	}
+];
+		console.log(web3);
+		var MyContract = web3.eth.contract(contractABI);
+		console.log(MyContract);
+		
+		var contractInstance = MyContract.at(contractAddr);
+		console.log(contractInstance);
+		
+
+		contractInstance.myFunction((error, data) => {
+			console.log(data)
+		});
+		// contractInstance.myFunction({from:"0x8380f30d3ce5bf251a4f039e84302a4a8a29ef7f"});
+        </script>
+    </head>
+	
+	<!-- 화면 그리기 담당 -->
+    <body>
+    
+    </body>
+</html>

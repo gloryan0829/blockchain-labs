@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="container p-2">
+                <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="accountName" placeholder="EOS Account Name" aria-label="Recipient's username" aria-describedby="button-addon2">
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary" type="button" onclick="getAccountInfo()" id="button-addon2">조회</button>
+                        </div>
+                </div>
+                <div id="info" class="row" style="display: none;">
+                        <h2 id="account" class="col-12 text-center">
+                        </h2>
+                        
+                        <div class="col-12 row">
+                                <div class="col-6">
+                                        <div class="row p-1">
+                                            <div class="col-3">Total</div>
+                                            <div class="col-9" id="total"></div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-3">Unstake</div>
+                                            <div class="col-9" id="unstake"></div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-3">Stake</div>
+                                            <div class="col-9" id="stake"></div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-3">Refund</div>
+                                            <div class="col-9" id="refund"></div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-3">CPU</div>
+                                            <div class="col-9" id="cpu"></div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-3">NET</div>
+                                            <div class="col-9" id="net"></div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-3">RAM</div>
+                                            <div class="col-9" id="ram">2222 EOS</div>
+                                        </div>
+                                    </div>    
+                            <div class="col-6">
+                                      
+                                        <form>
+                                                <div class="form-group">
+                                                  <label for="exampleInputEmail1">TO *</label>
+                                                  <input type="text" class="form-control" id="to" aria-describedby="emailHelp" placeholder="받는 주소">
+                                                </div>
+                                                <div class="form-group">
+                                                  <label for="quantity">수량 *</label>
+                                                  <input type="number" class="form-control" id="quantity" placeholder="수량">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="memo">메모</label>
+                                                    <input type="textarea" class="form-control" id="memo" placeholder="메모">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="privateKey">Private Key *</label>
+                                                    <input type="text" class="form-control" id="privateKey" placeholder="Private Key">
+                                                </div>
+                                                <button type="button" onclick="transfer()" class="btn btn-primary">Submit</button>
+                                              </form>
+                                </div>
+                        </div>
+                           
+                        
+                </div>
+                <div id="error" class="text-danger" style="display: none;">
+                   <h3>ERROR</h3>
+                    <div id="errorMessage"></div>
+                </div>
+                <div id="success" class="text-success" style="display: none;">
+                    <h3>SUCCESS</h3>
+                    <div id="successMessage"></div>
+                </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/eosjs@16.0.8/lib/eos.min.js"></script>
+        <script src="js/eosjs.js"></script>
+    </body>
+</html>

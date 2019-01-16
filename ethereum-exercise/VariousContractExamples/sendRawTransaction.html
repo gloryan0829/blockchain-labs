@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js"></script>
+    
+    <title> Token 예제</title>
+    <script type="text/javascript">
+        $(document).ready( async () => {
+        //    web3 = new Web3(window.web3.currentProvider);
+           const MNEMONIC_KEY='bind vault local impact example easily essence civil later pretty run giraffe'
+           const RPC_ADDRESS='http://localhost:7545'
+
+           const HDWalletProvider = require('truffle-hdwallet-provider');
+           const Web3 = require('web3');
+           const provider = new HDWalletProvider(MNEMONIC_KEY, RPC_ADDRESS);
+           web3 = new Web3(provider);
+
+        });
+        
+        async function signTransaction(){
+            let transactionData = $('#transactionData').val();
+
+            console.log(transactionData);
+            console.log(JSON.parse(transactionData));
+            const signTransacitonData = await web3.eth.signTransaction(JSON.parse(transactionData))
+            console.log(signTransacitonData)
+        }
+    </script>
+</head>
+
+<body>
+    <h1>트랜잭션 Data Signing</h1>
+    <textarea id="transactionData" rows="10" cols="100"></textarea>
+    <button onClick="signTransaction()" type="button">Signed Transaction</button>
+</body>
+</html>

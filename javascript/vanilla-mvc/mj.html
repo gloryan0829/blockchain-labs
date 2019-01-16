@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<meta charset="UTF-8">
+        <title>web3js활용</title>
+				<!-- cdn 방식 js파일 링크 : web3, bignumber, jquery -->
+                <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.js"></script>
+                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bignumber.js/bignumber.min.js"></script>
+        		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+				
+        		<style>
+        			body {
+        				font-size:14px;
+        			}
+        		</style>
+        		<script>
+				let Web3 = require('web3');
+				console.log(web3);
+				
+				if (typeof web3 !== 'undefined') 
+				{
+					web3 = new Web3(window.web3.currentProvider); //Meta Mask 접속 시
+					// web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io'));
+					console.log("meta mask!");
+				} 
+				else 
+				{
+					web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+					console.log("No!! meta mask!");
+				}
+				console.log("web3js api version >> ", web3.version.api); // web3 verson
+				
+				let wei, ether; 
+				web3.eth.getBalance(
+					'0x8380F30D3CE5Bf251A4f039e84302a4a8a29Ef7f',
+					(error, balance) => {
+						wei = balance;	
+						console.log("wei : " + wei);
+						ether = web3.fromWei(wei.toNumber(), "ether");
+						console.log("ether : " + ether);
+				});
+				
+				web3.eth.getAccounts((err, data)=> 
+				{
+					console.log(err);
+					console.log(data);
+				});
+
+
+
+								
+				// <!-- 초기화 코드(자바스크립트) -->
+				$(document).ready( function() 
+				{
+					getAccounts().then( (arr) => 
+					{
+						console.log("계정수 : ", arr.length);			
+						console.log("계정 : ", arr);
+						
+						option = "";
+						for(account in arr)
+						{
+							let add = web3.eth.accounts[account];
+							option += '<option>' + add + '</option>';
+						}
+
+						if( option )
+						{
+							option = '<option>선택하세요.</option>' + option;
+							$("#AccountList").html(option);
+							
+							$("#AccountListSend").html(option);
+							
+							$("#AccountListReceive").html(option);
+						}
+					} );
+				});
+				
+				
+				
+				
+				
+								
+				<!-- 함수 -->
+				function getAccounts() 
+				{
+					return new Promise( (ok, fail) =>
+					{
+						web3.eth.getAccounts( (error, result) =>
+						{
+							if(!error) {
+								ok(result);
+							}else {
+								fail(error);
+							}
+						});
+					});
+				}
+				
+				function getAccount() 
+				{
+					return new Promise( (ok, fail) =>
+					{
+						var obj = document.getElementById("AccountNum");
+						$("#Account").text(web3.eth.accounts[obj.value]);
+						console.log("getAccount()")
+					});
+				}
+				
+				
+				function AccountListChange()
+				{
+					return new Promise( (ok, fail) =>
+					{
+						let addr = document.getElementById("AccountList").value;
+						let wei = web3.eth.getBalance(addr);
+						//let ether = web3.fromWei(new BigNumber(wei).toFixed(), "ether");
+						let ether = web3.fromWei(wei.toNumber(), "ether");
+						$("#myether").text(ether);
+					});					
+				}
+				
+				function EtherSend()
+				{
+					return new Promise( (ok, fail) =>
+					{
+						let _from = document.getElementById("AccountListSend").value;
+						let _to = document.getElementById("AccountListReceive").value;
+						let _value = document.getElementById("sendEther").value * 1000000000000000000;
+					
+						web3.eth.sendTransaction({
+							       from: _from,
+							       to: _to,
+							       value: _value,
+							}, (error, result) => {
+								console.log(result);
+								if(!error) ok(result);
+								else fail(error);
+							});
+					});
+				}
+				
+        		</script>
+    </head>
+	
+	<!-- 화면 그리기 담당 -->
+    <body>
+    <h2>Web3js API 예제 구현</h2>
+	계정 리스트 : <select id="AccountList" onchange="AccountListChange()">
+	    		  </select><br/>
+	보유 이더리움 : <span id="myether">0 ether</span><br/>
+	전송 : from <select id="AccountListSend"></select>
+	      to <select id="AccountListReceive"></select><br/> 
+	전송이더갯수 : <input id="sendEther" type="number"><button onclick="EtherSend();">보내기</button><br/>
+	
+	<!--	
+	계정 :  <span id="Account">none</span> 
+			<select id="AccountNum" onchange="AccountListChange()">
+			<option value="0">1</option>
+			<option value="1">2</option>
+			<option value="2">3</option>
+			<option value="3">4</option>
+			<option value="4">5</option>
+			</select>
+			<button onclick="getAccount();">클릭</button><br/>
+	-->
+    </body>
+</html>

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<meta charset="UTF-8">
+        <title>web3js활용</title>
+		
+		<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bignumber.js/bignumber.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		
+		<script>
+		/*	
+		let Web3 = require('web3');
+			
+		if (typeof web3 !== 'undefined') 
+		{
+			web3 = new Web3(window.web3.currentProvider); //Meta Mask 접속 시
+			// web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io'));
+			console.log("meta mask!");
+		} 
+		else 
+		{
+			web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+			console.log("No!! meta mask!");
+		}
+				
+		var contractAddr = "0xcca050262927b0d7e81ad749c55c15168652ddb1";
+		var contractABI = [
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "a",
+					"type": "uint256"
+				}
+			],
+			"name": "SetBalance",
+			"outputs": [],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "balance",
+				"outputs": [
+					{
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [],
+				"name": "myFunction",
+				"outputs": [
+					{
+						"name": "",
+						"type": "string"
+					}
+				],
+				"payable": false,
+				"stateMutability": "pure",
+				"type": "function"
+			}
+		];
+		
+		var MyContract = web3.eth.contract(contractABI);
+		var contractInstance = MyContract.at(contractAddr);
+		*/
+		
+		
+		/*
+		contractInstance.myFunction.call((error, data) => {
+			console.log(data);			
+		});
+		
+		contractInstance.SetBalance.sendTransaction(
+			700, { from: "0x8380f30d3ce5bf251a4f039e84302a4a8a29ef7f"}, 
+			(error, data) => {
+			console.log(data);			
+		});
+		
+		
+		contractInstance.balance((error, data) => {
+			console.log(data);
+			
+			var val = data.toNumber();
+			
+			console.log(val);
+			
+		});
+		*/
+		
+		
+		var contractAddr = "0xe9c9bd94b8447f8c85d20eb162672aff2838429f";
+		var contractABI	 = [
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_spender",
+				"type": "address"
+			},
+			{
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [
+			{
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "transfer",
+		"outputs": [
+			{
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [
+			{
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"name": "_initialAmount",
+				"type": "uint256"
+			},
+			{
+				"name": "_tokenName",
+				"type": "string"
+			},
+			{
+				"name": "_decimalUnits",
+				"type": "uint8"
+			},
+			{
+				"name": "_tokenSymbol",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "_owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "_spender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "Approval",
+		"type": "event"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_owner",
+				"type": "address"
+			},
+			{
+				"name": "_spender",
+				"type": "address"
+			}
+		],
+		"name": "allowance",
+		"outputs": [
+			{
+				"name": "remaining",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			},
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "allowed",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_owner",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"name": "balance",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "balances",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "decimals",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "name",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "symbol",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "totalSupply",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	}
+];
+		
+		// web3 connect
+		let Web3 = require('web3');
+		if (typeof web3 !== 'undefined') 
+		{
+			web3 = new Web3(window.web3.currentProvider); //Meta Mask 접속 시
+			console.log("meta mask!");
+		} 
+		else 
+		{
+			web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+			console.log("No!! meta mask!");
+		}
+		
+		var MyContract = web3.eth.contract(contractABI);
+		var contractInstance = MyContract.at(contractAddr);
+			
+		
+		function myAddrCheck() {
+			var coinbase = web3.eth.coinbase;
+			console.log(coinbase);
+			$("#myAddr").text(coinbase);
+			
+			if( coinbase !== null )
+			{
+				contractInstance.balanceOf.call(coinbase, (error, data) => {
+					console.log(error);	
+					
+					addHtml = "";
+					addHtml += "세연코인 : " + data + " SYC";
+					$("#SYCCount").html(addHtml);
+					
+					addHtml = "";
+					addHtml += "보낼사람 주소 : ";
+					addHtml += "<input id=" + "toAddr" + "></input>";
+					addHtml += "    수량 : ";
+					addHtml += "<input id=" + "sendCount" + "></input>";
+					addHtml += "<button onclick=" + "CoinSend();>" + ">보내기</Button>";
+					
+					$("#sendView").html(addHtml);
+				} );
+			}
+		}
+		
+		function CoinSend()
+		{
+			var formAddr = $("#myAddr").text();
+			console.log(formAddr);
+			var toAddr = $("#toAddr").val();
+			var coinCnt = $("#sendCount").val();
+			
+			contractInstance.transfer.sendTransaction
+			(
+				toAddr, coinCnt, {from : formAddr}, (error, data) =>
+				{
+					console(error);
+				}
+			);
+		}
+		
+        </script>
+    </head>
+	
+	<!-- 화면 그리기 담당 -->
+    <body>
+	<h2>< Welcome to Seyeon Coin ></h2>
+	<br/>
+	<br/>
+	계정 주소 : <span id="myAddr" type="span"></span> <button onclick="myAddrCheck();"> 주소가져오기 </button>
+	<br/>
+	<br/>
+	<span id="SYCCount"></span>
+	<br/>
+	<br/>
+	<span id="sendView"></span>
+    
+    </body>
+</html>
